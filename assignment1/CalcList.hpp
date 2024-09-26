@@ -3,6 +3,8 @@
 
 #include "CalcListInterface.hpp"
 
+//test
+
 class CalcList : public CalcListInterface {
 public:
     double total() const;
