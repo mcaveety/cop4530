@@ -5,6 +5,7 @@
 
 class CalcList : public CalcListInterface {
 public:
+    CalcList() { ; }
     double total() const;
     void newOperation(const FUNCTIONS func, const double operand);
     void removeLastOperation();
@@ -13,11 +14,11 @@ public:
 private:
     class Node {
     public:
-        double total = 0;
+        double totalVal = 0;
         FUNCTIONS newOp = ADDITION;
         double newNum = 0;
+        int numOfOps = 0;
         Node *next = nullptr;
-        int numOps = 0;
     };
 
     Node *top = nullptr;
