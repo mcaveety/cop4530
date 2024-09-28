@@ -3,9 +3,9 @@
 
 #include "CalcListInterface.hpp"
 
-class CalcList : public CalcListInterface {
+class CalcList : public CalcListInterface { // Derived from CalcListInterface class
 public:
-    CalcList() { ; }
+    CalcList() { ; } // Empty object initializer
     double total() const;
     void newOperation(const FUNCTIONS func, const double operand);
     void removeLastOperation();
@@ -21,7 +21,7 @@ private:
         Node *next = nullptr;
     };
 
-    Node *top = nullptr;
+    Node *top = nullptr; // Pointer to most recent node in calculation list
 };
 
 #endif

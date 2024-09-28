@@ -1,81 +1,73 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+
+// Header file with CalcList class definitions
 #include "CalcList.hpp"
 
 
+// Return current value of most recent operation
 double CalcList :: total() const {
     return top->totalVal;
 }
 
+// Perform a new operation in the sequence
 void CalcList :: newOperation(const FUNCTIONS func, const double operand) {
-    if (top == nullptr) { //first if statement for first Node
-        Node *temp = new Node;
 
-        switch(func) { // temp->totalVal just accesses the default values for Node
-            case ADDITION:
-                temp->totalVal = temp->totalVal + operand;
-                break;
-            case SUBTRACTION:
-                temp->totalVal = temp->totalVal - operand;
-                break;
-            case MULTIPLICATION:
-                temp->totalVal = temp->totalVal * operand;
-                break;
-            case DIVISION:
-                if(operand == 0){
-                    throw("Divide by 0 Error");
-                }
-                else{
-                    temp->totalVal = temp->totalVal / operand;
-                }   
-        }
+    Node *temp = new Node; // Instantiate new node object
+    // Set node values based on function arguments
+    temp->newOp = func;
+    temp->newNum = operand;
 
-        temp->newOp = func;
-        temp->newNum = operand;
-        temp->numOfOps = (temp->numOfOps)++;
-        temp->next = nullptr;
+    if (top == nullptr) { // For first calculation performed
+        top = temp; // Set top to point to temp
+    }
+    
+    /* Perform specified func operation. 
+    *  Note that, if first operation, temp = top
+    *  Otherwise, top will be the previous operation performed.
+    */
+    switch(func) { 
+        case ADDITION:
+            temp->totalVal = top->totalVal + operand;
+            break;
+        case SUBTRACTION:
+            temp->totalVal = top->totalVal - operand;
+            break;
+        case MULTIPLICATION:
+            temp->totalVal = top->totalVal * operand;
+            break;
+        case DIVISION:
+            if(operand == 0){
+                delete temp; // avoid memory leaks
+                throw("Divide by 0 Error");
+            }
+            else{
+                temp->totalVal = top->totalVal / operand;
+            }   
+            break;
+    }
 
+    // If calculation was successful, link nodes
+    // Note: only necessary if this is not the first operation
+    if (temp != top){
+        temp->numOfOps = (top->numOfOps)++; // increment number of operations
+        temp->next = top; // point to previous top node
         top = temp;
     }
-    else{ //else for any node other than first
-        Node *temp = new Node;
 
-        switch(func) {
-            case ADDITION:
-                temp->totalVal = top->totalVal + operand;
-                break;
-            case SUBTRACTION:
-                temp->totalVal = top->totalVal - operand;
-                break;
-            case MULTIPLICATION:
-                temp->totalVal = top->totalVal * operand;
-                break;
-            case DIVISION:
-                if (operand == 0) {
-                    throw("Divide by 0 Error");
-                }
-                else {
-                    temp->totalVal = top->totalVal / operand;
-                }
-        }
-
-        temp->newOp = func;
-        temp->newNum = operand;
-        temp->numOfOps = (top->numOfOps)++;
-        temp->next = top;
-
-        top = temp;
-    }
 }
 
+// Undo last operation performed in calculation sequence
 void CalcList :: removeLastOperation() {
-    Node *temp = top;
-    top = top->next;
-    delete temp;
+    Node *temp = top; // create temporary node pointing to last operation
+    top = top->next; // point top to n-1th operation 
+    delete temp; // delete the nth operation, effectively undoing one step
 }
 
-// toString function in progress
+
+
+// toString function in progress <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< in progress
 std::string CalcList :: toString(unsigned short precision) const {
     if(precision < 0 || precision > 10) {
         throw("Precision Input Invalid");
