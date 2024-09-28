@@ -84,6 +84,19 @@ std::string CalcList :: toString(unsigned short precision) const {
     return allOutputs;
 }
 
-int main() {
-    return 0;
-}
+// For testing of class functionality
+
+// int main() {
+//     CalcList list = CalcList();
+//     std::cout << list.total();
+//     list.newOperation(ADDITION, 10);
+//     std::cout << list.total();
+//     list.newOperation(MULTIPLICATION, 2);
+//     std::cout << list.total();
+//     list.removeLastOperation();
+//     std::cout << list.total();
+
+//     return 0;
+// }
+
+// hint: press  ctrl + / to comment out a highlighted code block
