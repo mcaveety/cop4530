@@ -13,7 +13,7 @@ double CalcList :: total() const {
         return top->totalVal;
     }
     else{
-        return DEFAULT_TOTAL; // Total value startes at 0 (DEFAULT_TOTAL is 0)
+        return DEFAULT_TOTAL; // Total value starts at 0 (DEFAULT_TOTAL is 0)
     }
 }
 
@@ -31,8 +31,7 @@ void CalcList :: newOperation(const FUNCTIONS func, const double operand) {
     
     /* Perform specified func operation. 
     *  Note that, if first operation, temp = top
-    *  Otherwise, top will be the previous operation performed.
-    */
+    *  Otherwise, top will be the previous operation performed. */
     switch(func) { 
         case ADDITION:
             temp->totalVal = top->totalVal + operand;
@@ -70,21 +69,21 @@ void CalcList :: removeLastOperation() {
         throw("Cannot remove from empty list");
     Node *temp = top; // create temporary node pointing to last operation
     top = top->next; // point top to n-1th operation 
-    delete temp; // delete the nth operation, effectively undoing one step
+    delete temp; // delete the nth operation
 }
 
 
 
 // Returns a string of all calculations
 std::string CalcList :: toString(unsigned short precision) const {
+    double zero = 0;
 
+    // Check for operations performed
     if(top == nullptr)
         throw("No operations performed");
 
-    if(precision < 0 || precision > 10) {
-        throw("Precision Input Invalid");
-    }
-
+        
+    // Generate string
     std::ostringstream allCalc;
     allCalc << std::fixed << std::setprecision(precision);
     
@@ -95,7 +94,7 @@ std::string CalcList :: toString(unsigned short precision) const {
         allCalc << temp->numOfOps + 1 << ": ";
         
         if (temp->next == nullptr)
-            allCalc << "0";
+            allCalc << zero;
         else
             allCalc << temp->next->totalVal;
         
@@ -116,10 +115,11 @@ std::string CalcList :: toString(unsigned short precision) const {
         
         allCalc << temp->newNum << "=" << temp->totalVal << "\n";
 
-        temp = temp->next;
+        temp = temp->next; // move to next operation
         
     }
 
+    // Convert & return string
     return allCalc.str();
 }
 
