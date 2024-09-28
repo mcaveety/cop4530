@@ -57,7 +57,7 @@ void CalcList :: newOperation(const FUNCTIONS func, const double operand) {
     // If calculation was successful, link nodes
     // Note: only necessary if this is not the first operation
     if (temp != top){
-        temp->numOfOps = (top->numOfOps)++; // increment number of operations
+        temp->numOfOps = top->numOfOps + 1; // increment number of operations
         temp->next = top; // point to previous top node
         top = temp;
     }
@@ -73,34 +73,82 @@ void CalcList :: removeLastOperation() {
 
 
 
-// toString function in progress <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< in progress
+// Returns a string of all calculations
 std::string CalcList :: toString(unsigned short precision) const {
+
+    if(top == nullptr)
+        throw("No operations performed");
+
     if(precision < 0 || precision > 10) {
         throw("Precision Input Invalid");
     }
 
-    std::string allOutputs = "";
+    std::ostringstream allCalc;
+    allCalc << std::fixed << std::setprecision(precision);
     
     Node *temp = top;
-    while (temp != nullptr) {
+    while (temp->next != nullptr) {
+
+        // Store operation
+        allCalc << temp->numOfOps + 1 << ": " << temp->next->totalVal;
+        
+        switch(temp->newOp){
+            case ADDITION:
+                allCalc << "+";
+                break;
+            case SUBTRACTION:
+                allCalc << "-";
+                break;
+            case MULTIPLICATION:
+                allCalc << "*";
+                break;
+            case DIVISION:
+                allCalc << "/";
+                break;
+        }
+        
+        allCalc << temp->newNum << "=" << temp->totalVal << "\n";
 
         temp = temp->next;
+        
     }
 
-    return allOutputs;
+    // Store final operation
+
+    allCalc << temp->numOfOps + 1 << ": " << "0";
+    
+    switch(temp->newOp){
+        case ADDITION:
+            allCalc << "+";
+            break;
+        case SUBTRACTION:
+            allCalc << "-";
+            break;
+        case MULTIPLICATION:
+            allCalc << "*";
+            break;
+        case DIVISION:
+            allCalc << "/";
+            break;
+    }
+    
+    allCalc << temp->newNum << "=" << temp->totalVal << "\n";
+
+    return allCalc.str();
 }
 
 // For testing of class functionality
 
 int main() {
     CalcList list = CalcList();
-    std::cout << list.total() << std::endl;
+    //std::cout << list.total() << std::endl;
     list.newOperation(ADDITION, 10);
     list.newOperation(DIVISION, 5);
-    std::cout << list.total() << std::endl;
+    //std::cout << list.total() << std::endl;
     list.newOperation(SUBTRACTION, 1);
     list.newOperation(MULTIPLICATION, 9);
-    std::cout << list.total() << std::endl;
+    //std::cout << list.total() << std::endl;
+    std::cout << list.toString(2) << std::endl;
 
     return 0;
 }
