@@ -66,6 +66,8 @@ void CalcList :: newOperation(const FUNCTIONS func, const double operand) {
 
 // Undo last operation performed in calculation sequence
 void CalcList :: removeLastOperation() {
+    if (top == nullptr)
+        throw("Cannot remove from empty list");
     Node *temp = top; // create temporary node pointing to last operation
     top = top->next; // point top to n-1th operation 
     delete temp; // delete the nth operation, effectively undoing one step
