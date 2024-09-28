@@ -87,10 +87,15 @@ std::string CalcList :: toString(unsigned short precision) const {
     allCalc << std::fixed << std::setprecision(precision);
     
     Node *temp = top;
-    while (temp->next != nullptr) {
+    while (temp != nullptr) {
 
         // Store operation
-        allCalc << temp->numOfOps + 1 << ": " << temp->next->totalVal;
+        allCalc << temp->numOfOps + 1 << ": ";
+        
+        if (temp->next == nullptr)
+            allCalc << "0";
+        else
+            allCalc << temp->next->totalVal;
         
         switch(temp->newOp){
             case ADDITION:
@@ -113,44 +118,12 @@ std::string CalcList :: toString(unsigned short precision) const {
         
     }
 
-    // Store final operation
-
-    allCalc << temp->numOfOps + 1 << ": " << "0";
-    
-    switch(temp->newOp){
-        case ADDITION:
-            allCalc << "+";
-            break;
-        case SUBTRACTION:
-            allCalc << "-";
-            break;
-        case MULTIPLICATION:
-            allCalc << "*";
-            break;
-        case DIVISION:
-            allCalc << "/";
-            break;
-    }
-    
-    allCalc << temp->newNum << "=" << temp->totalVal << "\n";
-
     return allCalc.str();
 }
 
 // For testing of class functionality
 
 int main() {
-    CalcList list = CalcList();
-    //std::cout << list.total() << std::endl;
-    list.newOperation(ADDITION, 10);
-    list.newOperation(DIVISION, 5);
-    //std::cout << list.total() << std::endl;
-    list.newOperation(SUBTRACTION, 1);
-    list.newOperation(MULTIPLICATION, 9);
-    //std::cout << list.total() << std::endl;
-    std::cout << list.toString(2) << std::endl;
 
     return 0;
 }
-
-// hint: press  ctrl + / to comment out a highlighted code block
