@@ -5,10 +5,16 @@
 // Header file with CalcList class definitions
 #include "CalcList.hpp"
 
+#define DEFAULT_TOTAL 0.0
 
 // Return current value of most recent operation
 double CalcList :: total() const {
-    return top->totalVal;
+    if(top != nullptr){
+        return top->totalVal;
+    }
+    else{
+        return DEFAULT_TOTAL; // Total value startes at 0 (DEFAULT_TOTAL is 0)
+    }
 }
 
 // Perform a new operation in the sequence
@@ -86,17 +92,17 @@ std::string CalcList :: toString(unsigned short precision) const {
 
 // For testing of class functionality
 
-// int main() {
-//     CalcList list = CalcList();
-//     std::cout << list.total();
-//     list.newOperation(ADDITION, 10);
-//     std::cout << list.total();
-//     list.newOperation(MULTIPLICATION, 2);
-//     std::cout << list.total();
-//     list.removeLastOperation();
-//     std::cout << list.total();
+int main() {
+    CalcList list = CalcList();
+    std::cout << list.total() << std::endl;
+    list.newOperation(ADDITION, 10);
+    list.newOperation(DIVISION, 5);
+    std::cout << list.total() << std::endl;
+    list.newOperation(SUBTRACTION, 1);
+    list.newOperation(MULTIPLICATION, 9);
+    std::cout << list.total() << std::endl;
 
-//     return 0;
-// }
+    return 0;
+}
 
 // hint: press  ctrl + / to comment out a highlighted code block
