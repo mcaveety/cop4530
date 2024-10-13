@@ -9,15 +9,13 @@ class Deque {
         class Node {
             public:
                 char ch;
-                Node * prev;
-                Node * next;
+                Node * prev = nullptr;
+                Node * next = nullptr;
         };
-        // Head and Tail sentinel nodes of deque
+        // Head and Tail pointers
         Node *head = nullptr;
         Node *tail = nullptr;
 
-        // Sets up the start of a deque
-        void setDeque(char ch);
     public:
         Deque() {};
         char front();
@@ -33,51 +31,85 @@ class Deque {
 // Return current front of the deque
 char Deque::front(){
     if(isEmpty()){
-        std::cout << "Empty deque" << std::endl;
-        return ' ';
+        std::cout << "Empty deque, nothing to show" << std::endl;
+        return ' '; // <<<< review <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     }
     else {
-        return head->next->ch;
+        return head->ch;
     }
 }
 
 // Return current back of the deque
 char Deque::back(){
     if(isEmpty()){
-        std::cout << "Empty deque" << std::endl;
+        std::cout << "Empty deque, nothing to show" << std::endl;
+        return ' '; // <<< review <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     } else {
-        return tail->prev->ch;
+        return tail->ch;
     }
 
 }
 
 // Push new node to front of deque
 void Deque::pushFront(char ch){
-    
+    Node *n = new Node;
+    // If first node in deque
+    if(isEmpty()){
+        head = n;
+        tail = n;
+    } else {
+        Node *thead = head;
+        n->next = head;
+        head = n;
+        thead->prev = n;
+    }
+    return;
 }
 
 // Push new node to back of deque
 void Deque::pushBack(char ch){
-
-
+    Node *n = new Node;
+    // If first node in deque
+    if(isEmpty()){
+        head = n;
+        tail = n;
+    } else {
+        Node *ttail = tail;
+        n->prev = tail;
+        tail = n;
+        ttail->next = n;
+    }
+    return;
 }
 
 // Pop first node from deque
 char Deque::popFront(){
+    char ch = ' ';
     if(isEmpty()){
         std::cout << "Deque empty! Nothing to pop" << std::endl;
     } else {
-
+        ch = head->ch;
+        Node *old = head;
+        head = head->next;
+        head->prev = nullptr;
+        delete old;
     }
+    return ch;
 }
 
 // Pop last node from deque
 char Deque::popBack(){
+    char ch = ' ';
     if(isEmpty()){
         std::cout << "Deque empty! Nothing to pop" << std::endl;
     } else {
-
+        ch = tail->ch;
+        Node *old = tail;
+        tail = tail->prev;
+        tail->next == nullptr;
+        delete old;
     }
+    return ch;
 }
 
 // Check if deque is empty
@@ -86,7 +118,6 @@ bool Deque::isEmpty(){
         return true;
     return false;
 }
-
 
 
 #endif /* DEQUE_H */
