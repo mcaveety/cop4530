@@ -3,9 +3,13 @@
 
 #include <string>
 #include "NotationConverterInterface.hpp"
+#include "Deque.hpp"
 
-class NotationConverterInterface : public NotationConverter {
+class NotationConverter : public NotationConverterInterface {
     public:
+        // Constructor
+        NotationConverter() {};
+
         // Postfix to other
         std::string postfixToInfix(std::string inStr);
         std::string postfixToPrefix(std::string inStr);
@@ -20,7 +24,7 @@ class NotationConverterInterface : public NotationConverter {
 
         // Verify no illegal characters
         std::string verify(std::string);
-    private:
+    //private:
 
 };
 
@@ -29,5 +33,28 @@ std::string NotationConverter::postfixToInfix(std::string inStr){
 
 }
 
-std::string NotationConverter:
+std::string NotationConverter::postfixToPrefix(std::string inStr){
+
+}
+
+std::string NotationConverter::infixToPostfix(std::string inStr){
+
+}
+
+std::string NotationConverter::infixToPrefix(std::string inStr){
+
+}
+
+std::string NotationConverter::prefixToInfix(std::string inStr){
+
+}
+
+std::string NotationConverter::prefixToPostfix(std::string inStr){
+
+}
+
+std::string verify(std::string){
+
+}
+
 #endif /* NOTATION CONVERTER_H */
