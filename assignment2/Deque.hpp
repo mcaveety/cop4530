@@ -28,11 +28,15 @@ class Deque {
 
 };
 
+class DequeEmpty : std::runtime_error {
+    public:
+        DequeEmpty() : std::runtime_error("Deque is empty") {} ;
+};
+
 // Return current front of the deque
 char Deque::front(){
     if(isEmpty()){
-        std::cout << "Empty deque, nothing to show" << std::endl;
-        return ' '; // <<<< review <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        throw DequeEmpty();
     }
     else {
         return head->ch;
@@ -42,8 +46,7 @@ char Deque::front(){
 // Return current back of the deque
 char Deque::back(){
     if(isEmpty()){
-        std::cout << "Empty deque, nothing to show" << std::endl;
-        return ' '; // <<< review <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        throw DequeEmpty();
     } else {
         return tail->ch;
     }
@@ -86,7 +89,7 @@ void Deque::pushBack(char ch){
 char Deque::popFront(){
     char ch = ' ';
     if(isEmpty()){
-        std::cout << "Deque empty! Nothing to pop" << std::endl;
+        throw DequeEmpty();
     } else {
         ch = head->ch;
         Node *old = head;
@@ -101,7 +104,7 @@ char Deque::popFront(){
 char Deque::popBack(){
     char ch = ' ';
     if(isEmpty()){
-        std::cout << "Deque empty! Nothing to pop" << std::endl;
+        throw DequeEmpty();
     } else {
         ch = tail->ch;
         Node *old = tail;
