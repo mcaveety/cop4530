@@ -27,7 +27,8 @@ std::string NotationConverter::prefixToInfix(std::string inStr) { // Implement
 std::string NotationConverter::prefixToPostfix(std::string inStr) {
 }
 
-bool verify(std::string inStr, bool isInfix)
+// Verifies string characters
+bool verify(std::string inStr, bool isInfix) // needs testing -- may need to convert to deque
 {
     /* Must verify matching parentheses (infix only)
      *  and matching operators & operands (all forms)
@@ -39,8 +40,8 @@ bool verify(std::string inStr, bool isInfix)
      *  abc-xyz 97-122
      */
     int length = inStr.length();
-    for (int i = 0; i < length; i++)
-    {
+    for (int i = 0; i < length; i++){
+
         char ch = inStr[i];
         // Check for any illegal characters
         if (
@@ -51,25 +52,42 @@ bool verify(std::string inStr, bool isInfix)
             && (ch < 97 && ch > 122)                        // abc-xyz
         )
             return false;
-
+        
+        // Check that parentheses are only present in infix inputs
         if (ch == 40 or ch == 41)
         {
-            if (isInfix)
-            {
-                // use deque as stack for matching parentheses
-                Deque parentheses;
-                // operations to add characters here
-                if (!parentheses.isEmpty())
-                {
-                    return false; // non-matching parentheses detected
-                }
-            }
-            else
-            {
-                return false; // cannot have parentheses in non-infix
-            }
+            if (!isInfix)
+                return false; // cannot have parentheses in non-infix inputs
+
         }
     }
+    return true;
+}
+
+// Validates whitespace matches expected conventions
+bool NotationConverter::validateWhitespace(std::string inStr){ // under construction
+    Deque subject = Deque(inStr);
+    // conditions:
+    /* mandatory whitespace between operands and operators
+    * no operators adjacent to parentheses
+    * parentheses and operands CAN be adjacent
+    * but only where the operand is interior to the parentheses*/
+
+    return true;
+}
+
+// Remove whitespace from string
+std::string NotationConverter::removeWhitespace(std::string inStr){ // needs testing
+    Deque subject = Deque(inStr);
+    Deque stripped = Deque();
+    Deque::Node *n = subject;
+    while(n != nullptr){
+        char ch = subject.front();
+        if (ch != ' ')
+            stripped.pushFront(ch)
+        n->next
+    }
+    
 }
 
 int main(){

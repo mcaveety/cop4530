@@ -25,6 +25,10 @@ class NotationConverter : public NotationConverterInterface {
         // Verify no illegal characters
         bool verify(std::string inStr, bool isInfix);
 
+        // Whitespace management
+        std::string validateWhitespace(std::string);
+        std::string removeWhitespace(std::string);
+
         // private:
 
 };
