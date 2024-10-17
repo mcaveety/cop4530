@@ -19,7 +19,7 @@ public:
 
     Deque() {};
     Deque(std::string inStr);
-    ~Deque() {};
+    ~Deque();
     char front() const;
     char back() const;
     void pushFront(char ch);

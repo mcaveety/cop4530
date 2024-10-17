@@ -8,12 +8,19 @@ public:
     DequeEmpty() : std::runtime_error("Deque is empty") {};
 };
 
+// Construct a Deque from a string
 Deque::Deque(std::string inStr) {
     int strLen = inStr.length();
 
     for (int i = 0; i < strLen; i++) {
         pushBack(inStr[i]);
     }
+}
+
+// Deque class deconstructor
+Deque::~Deque() {
+    while (!isEmpty())
+        popFront();
 }
 
 // Return current front of the deque
@@ -137,7 +144,7 @@ std::string Deque::toString() const {
 
 int main() { // main function just for testing (remove before submission)
     Deque d1;
-    
+
     d1.pushBack('h');
     d1.pushBack('e');
     d1.pushBack('l');
@@ -149,6 +156,29 @@ int main() { // main function just for testing (remove before submission)
     Deque d2("goodbye");
 
     std::cout << d2.toString() << std::endl;
+
+    d2.popFront();
+    d2.popFront();
+    d2.popFront();
+    d2.popFront();
+
+    std::cout << d2.toString() << std::endl;
+
+    std::cout << d1.isEmpty() << std::endl;
+
+    while (!d1.isEmpty())
+        d1.popBack();
+
+    std::cout << d1.isEmpty() << std::endl;
+
+    std::cout << d1.toString() << std::endl;
+
+    d1.~Deque();
+    d2.~Deque();
+
+    std::cout << d1.toString() << std::endl;
+    std::cout << d2.toString() << std::endl;
+
 
     return 0;
 }
