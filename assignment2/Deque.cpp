@@ -43,10 +43,31 @@ char Deque::back() const {
     }
 }
 
+// Return current presendence of front of stack (for operators)
+int Deque::frontPres() const {
+    if (isEmpty()) {
+        throw DequeEmpty();
+    }
+    else {
+        return head->pres;
+    }
+}
+
+// Return current presedence of back of stack (for operators)
+int Deque::backPres() const {
+    if (isEmpty()) {
+        throw DequeEmpty();
+    }
+    else {
+        return tail->pres;
+    }
+}
+
 // Push new node to front of deque
-void Deque::pushFront(char ch) {
+void Deque::pushFront(char ch, int pres) {
     Node *n = new Node;
     n->ch = ch;
+    n->pres = pres;
     // If first node in deque
     if (isEmpty()) {
         head = n;
@@ -62,9 +83,10 @@ void Deque::pushFront(char ch) {
 }
 
 // Push new node to back of deque
-void Deque::pushBack(char ch) {
+void Deque::pushBack(char ch, int pres) {
     Node *n = new Node;
     n->ch = ch;
+    n->pres = pres;
     // If first node in deque
     if (isEmpty()) {
         head = n;
@@ -142,43 +164,43 @@ std::string Deque::toString() const {
     return outStr;
 }
 
-int main() { // main function just for testing (remove before submission)
-    Deque d1;
+// int main() { // main function just for testing (remove before submission)
+//     Deque d1;
 
-    d1.pushBack('h');
-    d1.pushBack('e');
-    d1.pushBack('l');
-    d1.pushBack('l');
-    d1.pushBack('o');
+//     d1.pushBack('h');
+//     d1.pushBack('e');
+//     d1.pushBack('l');
+//     d1.pushBack('l');
+//     d1.pushBack('o');
 
-    std::cout << d1.toString() << std::endl;
+//     std::cout << d1.toString() << std::endl;
 
-    Deque d2("goodbye");
+//     Deque d2("goodbye");
 
-    std::cout << d2.toString() << std::endl;
+//     std::cout << d2.toString() << std::endl;
 
-    d2.popFront();
-    d2.popFront();
-    d2.popFront();
-    d2.popFront();
+//     d2.popFront();
+//     d2.popFront();
+//     d2.popFront();
+//     d2.popFront();
 
-    std::cout << d2.toString() << std::endl;
+//     std::cout << d2.toString() << std::endl;
 
-    std::cout << d1.isEmpty() << std::endl;
+//     std::cout << d1.isEmpty() << std::endl;
 
-    while (!d1.isEmpty())
-        d1.popBack();
+//     while (!d1.isEmpty())
+//         d1.popBack();
 
-    std::cout << d1.isEmpty() << std::endl;
+//     std::cout << d1.isEmpty() << std::endl;
 
-    std::cout << d1.toString() << std::endl;
+//     std::cout << d1.toString() << std::endl;
 
-    d1.~Deque();
-    d2.~Deque();
+//     d1.~Deque();
+//     d2.~Deque();
 
-    std::cout << d1.toString() << std::endl;
-    std::cout << d2.toString() << std::endl;
+//     std::cout << d1.toString() << std::endl;
+//     std::cout << d2.toString() << std::endl;
 
 
-    return 0;
-}
+//     return 0;
+// }

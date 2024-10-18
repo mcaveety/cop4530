@@ -18,7 +18,47 @@ std::string NotationConverter::postfixToPrefix(std::string inStr) { // Implement
 }
 
 std::string NotationConverter::infixToPostfix(std::string inStr) { // Implement
-    return ""; // for testing
+    Deque inDeq(stripWhitespace(inStr));
+    Deque outDeq;
+    Deque stack;
+    int curPres = 0;
+
+    while (!inDeq.isEmpty()) {
+        if (((inDeq.front() >= 48) && (inDeq.front() <= 57)) || ((inDeq.front() >= 65) && (inDeq.front() <= 90)) || ((inDeq.front() >= 97) && (inDeq.front() <= 122))) { // If front of inDeq is an operand
+            outDeq.pushBack(inDeq.popFront());
+        }
+        else if (inDeq.front() == 40) { // If front of inDeq is '('
+            stack.pushFront(inDeq.popFront(), -1);
+            curPres++;
+        }
+        else if (inDeq.front() == 41) { // If front of inDeq is ')'
+            while ((!stack.isEmpty()) && (stack.front() != 40)) {
+                outDeq.pushBack(stack.popFront());
+            }
+            stack.popFront();
+            curPres--;
+        }
+        else if ((inDeq.front() == 43) || (inDeq.front() == 45)) { // If front of inDeq is + or -
+            while ((!stack.isEmpty()) && (stack.frontPres() >= curPres)) {
+                outDeq.pushBack(stack.popFront());
+            }
+            stack.pushFront(inDeq.popFront());
+        }
+        else if ((inDeq.front() == 42) || (inDeq.front() == 47)) { // If front is inDeq is * or /
+            while ((!stack.isEmpty()) && (stack.frontPres() >= curPres)) {
+                if ((stack.frontPres() == curPres) && (stack.front() == 43 || stack.front() == 45)) // Prevents + and - from being treated with equal presedence as * and /
+                    break;
+                outDeq.pushBack(stack.popFront());
+            }
+            stack.pushFront(inDeq.popFront());
+        }
+    }
+
+    while (!stack.isEmpty()) {
+        outDeq.pushBack(stack.popFront());
+    }
+
+    return outDeq.toString();
 }
 
 std::string NotationConverter::infixToPrefix(std::string inStr) {
@@ -38,9 +78,9 @@ std::string NotationConverter::stripWhitespace(std::string inStr) {
     Deque dOut;
 
     while (!dIn.isEmpty()) {
-        if (dIn.front() != ' ') {
+        if (dIn.front() != ' ')
             dOut.pushBack(dIn.front());
-        }
+
         dIn.popFront();
     }
 
@@ -95,14 +135,7 @@ std::string NotationConverter::stripWhitespace(std::string inStr) {
 int main() { // main function just for testing (remove before submission)
     NotationConverter NC;
 
-    std::string str = " this has white space ";
-
-    std::cout << str << std::endl;
-
-    str = NC.stripWhitespace(str);
-
-    std::cout << str << std::endl;
-
+    std::cout << NC.infixToPostfix("2 + 3 - 5 * 8 + 2 / 7 - 5") << std::endl;
 
     return 0;
 }

@@ -9,6 +9,7 @@ public:
     class Node {
     public:
         char ch = 0;
+        int pres = 0; // To provide a value for presedence 
         Node *prev = nullptr;
         Node *next = nullptr;
     };
@@ -22,8 +23,10 @@ public:
     ~Deque();
     char front() const;
     char back() const;
-    void pushFront(char ch);
-    void pushBack(char ch);
+    int frontPres() const;
+    int backPres() const;
+    void pushFront(char ch, int pres = 0);
+    void pushBack(char ch, int pres = 0);
     char popFront();
     char popBack();
     bool isEmpty() const;
