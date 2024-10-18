@@ -164,8 +164,20 @@ std::string Deque::toString() const {
     return outStr;
 }
 
+<<<<<<< HEAD
 // int main() { // main function just for testing (remove before submission)
 //     Deque d1;
+=======
+
+int main() { // main function just for testing (remove before submission)
+    Deque d1;
+    
+    d1.pushBack('h');
+    d1.pushBack('e');
+    d1.pushBack('l');
+    d1.pushBack('l');
+    d1.pushBack('o');
+>>>>>>> c05eaa5100e543aa2e750880762557bff16710e7
 
 //     d1.pushBack('h');
 //     d1.pushBack('e');

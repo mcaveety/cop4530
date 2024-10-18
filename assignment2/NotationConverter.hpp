@@ -28,6 +28,10 @@ class NotationConverter : public NotationConverterInterface {
         // Strip all whitespace
         std::string stripWhitespace(std::string);
 
+        // Whitespace management
+        std::string validateWhitespace(std::string);
+        std::string removeWhitespace(std::string);
+
         // private:
 
 };
