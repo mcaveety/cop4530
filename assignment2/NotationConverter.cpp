@@ -135,7 +135,7 @@ std::string NotationConverter::stripWhitespace(std::string inStr) {
 int main() { // main function just for testing (remove before submission)
     NotationConverter NC;
 
-    std::cout << NC.infixToPostfix("2 + 3 - 5 * 8 + 2 / 7 - 5") << std::endl;
+    std::cout << NC.infixToPostfix("(4+5)*9") << std::endl;
 
     return 0;
 }
