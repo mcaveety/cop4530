@@ -67,7 +67,23 @@ std::string NotationConverter::infixToPrefix(std::string inStr) {
 }
 
 std::string NotationConverter::prefixToInfix(std::string inStr) { // Implement
-    return ""; // for testing
+    Deque inDeq(stripWhitespace(inStr));
+    Deque stack;
+
+    while (!inDeq.isEmpty()) {
+        if (((inDeq.back() >= 48) && (inDeq.back() <= 57)) || ((inDeq.back() >= 65) && (inDeq.back() <= 90)) || ((inDeq.back() >= 97) && (inDeq.back() <= 122))) { // If back of inDeq is an operand
+            stack.strPushFront(charToStr(inDeq.popBack()));
+        }
+        else if ((inDeq.front() == 43) || (inDeq.front() == 45) || (inDeq.front() == 42) || (inDeq.front() == 47)) { // If back of inDeq is an operator
+            std::string operand1 = stack.strPopFront();
+            std::string operand2 = stack.strPopFront();
+            std::string opSymbol = charToStr(inDeq.popBack());
+
+            stack.strPushFront("(" + operand1 + opSymbol + operand2 + ")");
+        }
+    }
+
+    return stack.strFront();
 }
 
 std::string NotationConverter::prefixToPostfix(std::string inStr) {
@@ -86,6 +102,11 @@ std::string NotationConverter::stripWhitespace(std::string inStr) {
     }
 
     return dOut.toString();
+}
+
+std::string NotationConverter::charToStr(char ch) const {
+    std::string str(1, ch);
+    return str;
 }
 
 // bool verify(std::string inStr, bool isInfix)
@@ -135,8 +156,13 @@ std::string NotationConverter::stripWhitespace(std::string inStr) {
 
 int main() { // main function just for testing (remove before submission)
     NotationConverter NC;
+    std::cout << std::endl;
 
-    std::cout << NC.infixToPostfix("1 + ((2 -(3 * ( 4))))/ 5/4*7*7-0+(((3)))/5 + (5/(6/(3*/2/(1))+1))") << std::endl;
+    std::cout << NC.infixToPostfix("a + ((b -(c * ( d))))/ e/f*g*h-i+(((j)))/k + (m/(n/(p*/q/(r))+s))") << std::endl;
+    std::cout << std::endl;
+
+    std::cout << NC.prefixToInfix("- - - + - + - 9 7 8 2 4 / / / 3 9 7 8 * 2 4 3") << std::endl;
+    std::cout << std::endl;
 
     return 0;
 }
