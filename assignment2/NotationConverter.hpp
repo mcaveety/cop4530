@@ -22,8 +22,15 @@ class NotationConverter : public NotationConverterInterface {
         std::string prefixToInfix(std::string inStr); //Implement
         std::string prefixToPostfix(std::string inStr);
 
-        // Verify no illegal characters
-        bool verify(std::string inStr, bool isInfix);
+        // // Verify no illegal characters
+        // bool verify(std::string inStr, bool isInfix);
+
+        // Strip all whitespace
+        std::string stripWhitespace(std::string);
+
+        // Whitespace management
+        std::string validateWhitespace(std::string);
+        std::string removeWhitespace(std::string);
 
         // private:
 
