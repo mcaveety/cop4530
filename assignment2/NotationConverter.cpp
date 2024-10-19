@@ -9,15 +9,19 @@
 #include "NotationConverter.hpp"
 #include "Deque.hpp"
 
+// Notation Conversion Methods
 std::string NotationConverter::postfixToInfix(std::string inStr) {
+    bool stringOk = verify(inStr, false);
     return ""; // for testing
 }
 
 std::string NotationConverter::postfixToPrefix(std::string inStr) { // Implement
+    bool stringOk = verify(inStr, false);
     return ""; // for testing
 }
 
 std::string NotationConverter::infixToPostfix(std::string inStr) { // Implement
+    bool stringOk = verify(inStr, true);
     Deque inDeq(stripWhitespace(inStr));
     Deque outDeq;
     Deque stack;
@@ -62,17 +66,24 @@ std::string NotationConverter::infixToPostfix(std::string inStr) { // Implement
 }
 
 std::string NotationConverter::infixToPrefix(std::string inStr) {
+    bool stringOk = verify(inStr, true);
     return ""; // for testing
 }
 
 std::string NotationConverter::prefixToInfix(std::string inStr) { // Implement
+    bool stringOk = verify(inStr, false);
     return ""; // for testing
 }
 
 std::string NotationConverter::prefixToPostfix(std::string inStr) {
+    bool stringOk = verify(inStr, false);
     return ""; // for testing
 }
 
+
+// Housekeeping & Management Methods
+
+// Removes all extraneous whitespace from string input
 std::string NotationConverter::stripWhitespace(std::string inStr) {
     Deque dIn(inStr);
     Deque dOut;
@@ -84,53 +95,83 @@ std::string NotationConverter::stripWhitespace(std::string inStr) {
         dIn.popFront();
     }
 
+    // Returns deque as string
     return dOut.toString();
 }
 
-// bool verify(std::string inStr, bool isInfix)
-// {
-//     /* Must verify matching parentheses (infix only)
-//      *  and matching operators & operands (all forms)
-//      *  Allowed characters:
-//      *  ( ) 40 & 41
-//      *  * + - / 42, 43, 45, 47
-//      *  0-9 48-57
-//      *  ABC-XYZ 65-90
-//      *  abc-xyz 97-122
-//      */
-//     int length = inStr.length();
-//     for (int i = 0; i < length; i++)
-//     {
-//         char ch = inStr[i];
-//         // Check for any illegal characters
-//         if (
-//             ch != 40 && ch != 41                            // ()
-//             && ch != 42 && ch != 43 && ch != 45 && ch != 47 // * + - /
-//             && (ch < 48 || ch > 57)                         // 0-9
-//             && (ch < 65 && ch > 90)                         // ABC-XYZ
-//             && (ch < 97 && ch > 122)                        // abc-xyz
-//         )
-//             return false;
+// Adds whitespace to string for printing
+std::string NotationConverter::addWhitespace(std::string inStr){
+    Deque dIn(inStr);
+    Deque dOut;
 
-//         if (ch == 40 or ch == 41)
-//         {
-//             if (isInfix)
-//             {
-//                 // use deque as stack for matching parentheses
-//                 Deque parentheses;
-//                 // operations to add characters here
-//                 if (!parentheses.isEmpty())
-//                 {
-//                     return false; // non-matching parentheses detected
-//                 }
-//             }
-//             else
-//             {
-//                 return false; // cannot have parentheses in non-infix
-//             }
-//         }
-//     }
-// }
+    // Adds whitespace inbetween characters
+    while (!dIn.isEmpty()){
+        if (dIn.front() == '('){
+            dOut.pushBack(dIn.front());
+            dIn.popFront();
+            continue;
+        }
+        dOut.pushBack(dIn.front());
+        dOut.pushBack(' ');
+        dIn.popFront();
+    }
+}
+
+
+// Checks input string for illegal syntax
+bool NotationConverter::verify(std::string inStr, bool isInfix)
+{
+    /*  Verifies parentheses, operators, & operands for all forms
+     * 
+     *  Allowed characters:
+     *  ( ) 40 & 41
+     *  * + - / 42, 43, 45, 47
+     *  0-9 48-57
+     *  ABC-XYZ 65-90
+     *  abc-xyz 97-122
+     */
+
+    Deque stack; // for tracking parentheses
+
+    int length = inStr.length();
+    for (int i = 0; i < length; i++)
+    {
+        char ch = inStr[i];
+        // Check for any illegal characters
+        if (
+            ch != 40 && ch != 41                            // ()
+            && ch != 42 && ch != 43 && ch != 45 && ch != 47 // * + - /
+            && (ch < 48 || ch > 57)                         // 0-9
+            && (ch < 65 && ch > 90)                         // ABC-XYZ
+            && (ch < 97 && ch > 122)                        // abc-xyz
+        )
+            return false;
+
+        if (ch == 40 || ch == 41)
+        {
+            if (isInfix)
+            {
+                if (ch == 40){
+                    stack.pushFront('(');
+                } else {
+                    stack.popFront();
+                }
+            }
+            else
+            {
+                return false; // cannot have parentheses in non-infix
+            }
+        }
+    }
+
+    if (!stack.isEmpty()){
+        return false;
+    }
+
+    return true;
+}
+
+
 
 int main() { // main function just for testing (remove before submission)
     NotationConverter NC;
