@@ -9,7 +9,10 @@
 #include "NotationConverter.hpp"
 #include "Deque.hpp"
 
-std::string NotationConverter::postfixToPrefix(std::string inStr) { // Implement
+std::string NotationConverter::postfixToPrefix(std::string inStr) {
+    if (!NotationConverter::verify(inStr, false))
+        throw;
+
     Deque inDeq(stripWhitespace(inStr));
     Deque stack;
 
@@ -26,15 +29,17 @@ std::string NotationConverter::postfixToPrefix(std::string inStr) { // Implement
         }
     }
 
-    return stack.strFront();
+    return addWhitespace(stack.strFront());
 }
 
-std::string NotationConverter::infixToPostfix(std::string inStr) { // Implement
-    bool stringOk = verify(inStr, true);
+std::string NotationConverter::infixToPostfix(std::string inStr) { 
+    if (!NotationConverter::verify(inStr, true))
+        throw;
+
     Deque inDeq(stripWhitespace(inStr));
     Deque outDeq;
     Deque stack;
-    int curPres = 0;
+    int curPres = 0; // Used to track parentheses order
 
     while (!inDeq.isEmpty()) {
         if (((inDeq.front() >= 48) && (inDeq.front() <= 57)) || ((inDeq.front() >= 65) && (inDeq.front() <= 90)) || ((inDeq.front() >= 97) && (inDeq.front() <= 122))) { // If front of inDeq is an operand
@@ -72,10 +77,13 @@ std::string NotationConverter::infixToPostfix(std::string inStr) { // Implement
         outDeq.pushBack(stack.popFront());
     }
 
-    return outDeq.toString();
+    return addWhitespace(outDeq.toString());
 }
 
-std::string NotationConverter::prefixToInfix(std::string inStr) { // Implement
+std::string NotationConverter::prefixToInfix(std::string inStr) { 
+    if (!NotationConverter::verify(inStr, false))
+        throw;
+
     Deque inDeq(stripWhitespace(inStr));
     Deque stack;
 
@@ -92,19 +100,20 @@ std::string NotationConverter::prefixToInfix(std::string inStr) { // Implement
         }
     }
 
-    return stack.strFront();
+
+    return addWhitespace(stack.strFront());
 }
 
 std::string NotationConverter::postfixToInfix(std::string inStr) {
-    return prefixToInfix(postfixToPrefix(inStr));
+    return addWhitespace(prefixToInfix(postfixToPrefix(inStr)));
 }
 
 std::string NotationConverter::infixToPrefix(std::string inStr) {
-    return postfixToPrefix(infixToPostfix(inStr));
+    return addWhitespace(postfixToPrefix(infixToPostfix(inStr)));
 }
 
 std::string NotationConverter::prefixToPostfix(std::string inStr) {
-    return infixToPostfix(prefixToInfix(inStr));
+    return addWhitespace(infixToPostfix(prefixToInfix(inStr)));
 }
 
 
@@ -126,77 +135,78 @@ std::string NotationConverter::stripWhitespace(std::string inStr) {
     return dOut.toString();
 }
 
+// Adds whitespace back to string
+std::string NotationConverter::addWhitespace(std::string inStr){
+    Deque inDeq(inStr);
+    Deque outDeq;
+
+    while (!inDeq.isEmpty()){
+        outDeq.pushBack(inDeq.front());
+        if (inDeq.front() == '(' && outDeq.back() == '('){
+            inDeq.popFront();
+            continue;
+        }
+
+        if (inDeq.front() == ')' && outDeq.back() == ')'){
+            inDeq.popFront();
+            continue;
+        }
+
+        inDeq.popFront();
+        if (!inDeq.isEmpty())
+            outDeq.pushBack(' ');
+    }
+    return outDeq.toString();
+}
+
 std::string NotationConverter::charToStr(char ch) const {
     std::string str(1, ch);
     return str;
 }
 
-// bool verify(std::string inStr, bool isInfix)
-// {
-//     /* Must verify matching parentheses (infix only)
-//      *  and matching operators & operands (all forms)
-//      *  Allowed characters:
-//      *  ( ) 40 & 41
-//      *  * + - / 42, 43, 45, 47
-//      *  0-9 48-57
-//      *  ABC-XYZ 65-90
-//      *  abc-xyz 97-122
-//      */
-//     int length = inStr.length();
-//     for (int i = 0; i < length; i++)
-//     {
-//         char ch = inStr[i];
-//         // Check for any illegal characters
-//         if (
-//             ch != 40 && ch != 41                            // ()
-//             && ch != 42 && ch != 43 && ch != 45 && ch != 47 // * + - /
-//             && (ch < 48 || ch > 57)                         // 0-9
-//             && (ch < 65 && ch > 90)                         // ABC-XYZ
-//             && (ch < 97 && ch > 122)                        // abc-xyz
-//         )
-//             return false;
+bool NotationConverter::verify(std::string inStr, bool isInfix)
+{
+    /* Must verify matching parentheses (infix only)
+     *  and matching operators & operands (all forms)
+     *  Allowed characters:
+     *  ( ) 40 & 41
+     *  * + - / 42, 43, 45, 47
+     *  0-9 48-57
+     *  ABC-XYZ 65-90
+     *  abc-xyz 97-122
+     */
+    Deque stack;
+    int length = inStr.length();
+    for (int i = 0; i < length; i++)
+    {
+        char ch = inStr[i];
+        // Check for any illegal characters
+        if (
+            ch != 40 && ch != 41                            // ()
+            && ch != 42 && ch != 43 && ch != 45 && ch != 47 // * + - /
+            && (ch < 48 || ch > 57)                         // 0-9
+            && (ch < 65 && ch > 90)                         // ABC-XYZ
+            && (ch < 97 && ch > 122)                        // abc-xyz
+        )
+            throw;
 
-//         if (ch == 40 or ch == 41)
-//         {
-//             if (isInfix)
-//             {
-//                 // use deque as stack for matching parentheses
-//                 Deque parentheses;
-//                 // operations to add characters here
-//                 if (!parentheses.isEmpty())
-//                 {
-//                     return false; // non-matching parentheses detected
-//                 }
-//             }
-//             else
-//             {
-//                 return false; // cannot have parentheses in non-infix
-//             }
-//         }
-//     }
-// }
-
-int main() { // main function just for testing (remove before submission)
-    NotationConverter NC;
-    std::cout << std::endl;
-
-    std::cout << NC.infixToPostfix("a + ((b -(c * ( d))))/ e/f*g*h-i+(((j)))/k + (m/(n/(p*z/q/(r))+s))") << std::endl;
-    std::cout << std::endl;
-
-    std::cout << NC.infixToPrefix("a + ((b -(c * ( d))))/ e/f*g*h-i+(((j)))/k + (m/(n/(p*z/q/(r))+s))") << std::endl; // giving errors
-    std::cout << std::endl;
-
-    std::cout << NC.prefixToInfix("- - - + - + - 9 7 8 2 4 / / / 3 9 7 8 * 2 4 3") << std::endl;
-    std::cout << std::endl;
-
-    std::cout << NC.prefixToPostfix("- - - + - + - 9 7 8 2 4 / / / 3 9 7 8 * 2 4 3") << std::endl;
-    std::cout << std::endl;
-
-    std::cout << NC.postfixToPrefix("9 7 - 8 + 2 - 4 + 3 9 / 7 / 8 / - 2 4 * - 3 -") << std::endl;
-    std::cout << std::endl;
-
-    std::cout << NC.postfixToInfix("9 7 - 8 + 2 - 4 + 3 9 / 7 / 8 / - 2 4 * - 3 -") << std::endl;
-    std::cout << std::endl;
-
-    return 0;
+        if (ch == 40 or ch == 41)
+        {
+            if (isInfix)
+            {
+                if (ch == 40){
+                    stack.pushFront('(');
+                } else {
+                    stack.popFront();
+                }
+            }
+            else
+            {
+                throw; // cannot have parentheses in non-infix
+            }
+        }
+    }
+    if (!stack.isEmpty())
+        throw;
+    return true;
 }
