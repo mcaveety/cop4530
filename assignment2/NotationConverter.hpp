@@ -31,6 +31,8 @@ class NotationConverter : public NotationConverterInterface {
         std::string validateWhitespace(std::string);
         bool verify(std::string, bool);
 
+        std::string charToStr(char ch) const;
+
         // private:
 
 };

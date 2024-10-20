@@ -68,8 +68,8 @@ void Deque::pushFront(char ch, int pres) {
     Node *n = new Node;
     n->ch = ch;
     n->pres = pres;
-    // If first node in deque
-    if (isEmpty()) {
+    
+    if (isEmpty()) { // If first node in deque
         head = n;
         tail = n;
     }
@@ -79,6 +79,7 @@ void Deque::pushFront(char ch, int pres) {
         head = n;
         thead->prev = n;
     }
+
     return;
 }
 
@@ -87,8 +88,8 @@ void Deque::pushBack(char ch, int pres) {
     Node *n = new Node;
     n->ch = ch;
     n->pres = pres;
-    // If first node in deque
-    if (isEmpty()) {
+    
+    if (isEmpty()) { // If first node in deque
         head = n;
         tail = n;
     }
@@ -98,6 +99,7 @@ void Deque::pushBack(char ch, int pres) {
         tail = n;
         ttail->next = n;
     }
+
     return;
 }
 
@@ -120,6 +122,7 @@ char Deque::popFront() {
         head->prev = nullptr;
         delete old;
     }
+
     return ch;
 }
 
@@ -142,6 +145,7 @@ char Deque::popBack() {
         tail->next = nullptr;
         delete old;
     }
+
     return ch;
 }
 
@@ -149,6 +153,14 @@ char Deque::popBack() {
 bool Deque::isEmpty() const {
     if (head == nullptr && tail == nullptr)
         return true;
+
+    return false;
+}
+
+bool Deque::isOneNode() const {
+    if (head == tail)
+        return true;
+
     return false;
 }
 
@@ -164,50 +176,128 @@ std::string Deque::toString() const {
     return outStr;
 }
 
+std::string Deque::strFront() const {
+    if (isEmpty()) {
+        throw DequeEmpty();
+    }
+    else {
+        return head->stackStr;
+    }
+}
+
+std::string Deque::strBack() const {
+    if (isEmpty()) {
+        throw DequeEmpty();
+    }
+    else {
+        return tail->stackStr;
+    }
+}
+
+void Deque::strPushFront(std::string inStr) {
+    Node *n = new Node;
+    n->stackStr = inStr;
+
+    if (isEmpty()) { // If first node in deque
+        head = n;
+        tail = n;
+    }
+    else {
+        Node *thead = head;
+        n->next = head;
+        head = n;
+        thead->prev = n;
+    }
+
+    return;
+}
+
+void Deque::strPushBack(std::string inStr) {
+    Node *n = new Node;
+    n->stackStr = inStr;
+
+    if(isEmpty()) {
+        head = n;
+        tail = n;
+    }
+    else {
+        Node *ttail = tail;
+        n->prev = tail;
+        tail = n;
+        ttail->next = n;
+    }
+
+    return;
+}
+
+std::string Deque::strPopFront() {
+    std::string str = "";
+    if (isEmpty()) {
+        throw DequeEmpty();
+    }
+    else if (head == tail) { // If there is only one node left
+        str = head->stackStr;
+        delete head;
+        head = nullptr;
+        tail = nullptr;
+    }
+    else {
+        str = head->stackStr;
+        Node *old = head;
+        head = head->next;
+        head->prev = nullptr;
+        delete old;
+    }
+
+    return str;
+}
+
+std::string Deque::strPopBack() {
+    std::string str = "";
+    if (isEmpty()) {
+        throw DequeEmpty();
+    }
+    else if (tail == head) { // If there is only one node left
+        str = tail->stackStr;
+        delete tail;
+        head = nullptr;
+        tail = nullptr;
+    }
+    else {
+        str = tail->stackStr;
+        Node *old = tail;
+        tail = tail->prev;
+        tail->next = nullptr;
+        delete old;
+    }
+
+    return str;
+}
 
 // int main() { // main function just for testing (remove before submission)
 //     Deque d1;
-    
-//     d1.pushBack('h');
-//     d1.pushBack('e');
-//     d1.pushBack('l');
-//     d1.pushBack('l');
-//     d1.pushBack('o');
 
-//     d1.pushBack('h');
-//     d1.pushBack('e');
-//     d1.pushBack('l');
-//     d1.pushBack('l');
-//     d1.pushBack('o');
+//     d1.strPushFront(" is ");
+//     d1.strPushBack(" a ");
+//     d1.strPushFront(" this ");
+//     d1.strPushBack(" test " );
 
-//     std::cout << d1.toString() << std::endl;
+//     std::cout << d1.strFront() << std::endl;
+//     std::cout << d1.strBack() << std::endl;
+//     std::cout << std::endl;
 
-//     Deque d2("goodbye");
+//     while (!d1.isEmpty()) {
+//         std::cout << d1.strPopFront();
+//     }
+//     std::cout << std::endl;
 
-//     std::cout << d2.toString() << std::endl;
+//     Deque d2;
 
-//     d2.popFront();
-//     d2.popFront();
-//     d2.popFront();
-//     d2.popFront();
+//     d2.strPushBack("This is a sentence that takes up one node.");
 
-//     std::cout << d2.toString() << std::endl;
-
-//     std::cout << d1.isEmpty() << std::endl;
-
-//     while (!d1.isEmpty())
-//         d1.popBack();
-
-//     std::cout << d1.isEmpty() << std::endl;
-
-//     std::cout << d1.toString() << std::endl;
-
-//     d1.~Deque();
-//     d2.~Deque();
-
-//     std::cout << d1.toString() << std::endl;
-//     std::cout << d2.toString() << std::endl;
-
+//     if (d2.isOneNode()) {
+//         std::cout << d2.strPopBack() << std::endl;
+//     }
 
 //     return 0;
 // }
