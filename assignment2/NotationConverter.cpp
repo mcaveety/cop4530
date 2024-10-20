@@ -10,7 +10,7 @@
 #include "Deque.hpp"
 
 std::string NotationConverter::postfixToPrefix(std::string inStr) {
-    if (!NotationConverter::verify(inStr, false))
+    if (!verify(inStr, false))
         throw;
 
     Deque inDeq(stripWhitespace(inStr));
@@ -33,7 +33,7 @@ std::string NotationConverter::postfixToPrefix(std::string inStr) {
 }
 
 std::string NotationConverter::infixToPostfix(std::string inStr) { 
-    if (!NotationConverter::verify(inStr, true))
+    if (!verify(inStr, true))
         throw;
 
     Deque inDeq(stripWhitespace(inStr));
@@ -81,7 +81,7 @@ std::string NotationConverter::infixToPostfix(std::string inStr) {
 }
 
 std::string NotationConverter::prefixToInfix(std::string inStr) { 
-    if (!NotationConverter::verify(inStr, false))
+    if (!verify(inStr, false))
         throw;
 
     Deque inDeq(stripWhitespace(inStr));
@@ -165,8 +165,7 @@ std::string NotationConverter::charToStr(char ch) const {
     return str;
 }
 
-bool NotationConverter::verify(std::string inStr, bool isInfix)
-{
+bool NotationConverter::verify(std::string inStr, bool isInfix) {
     /* Must verify matching parentheses (infix only)
      *  and matching operators & operands (all forms)
      *  Allowed characters:
@@ -176,41 +175,68 @@ bool NotationConverter::verify(std::string inStr, bool isInfix)
      *  ABC-XYZ 65-90
      *  abc-xyz 97-122
      */
-    Deque stack;
-    int length = inStr.length();
-    for (int i = 0; i < length; i++)
-    {
-        char ch = inStr[i];
-        // Check for any illegal characters
-        if (
-            ch != 40 && ch != 41                            // ()
-            && ch != 42 && ch != 43 && ch != 45 && ch != 47 // * + - /
-            && (ch < 48 || ch > 57)                         // 0-9
-            && (ch < 65 && ch > 90)                         // ABC-XYZ
-            && (ch < 97 && ch > 122)                        // abc-xyz
-        )
-            throw;
 
-        if (ch == 40 || ch == 41)
-        {
-            if (isInfix)
-            {
-                if (ch == 40){
-                    stack.pushFront('(');
-                } else {
-                    stack.popFront();
-                }
+    Deque inDeq(inStr);
+    Deque stack;
+
+    while (!inDeq.isEmpty()) {
+        if (
+        (inDeq.front() != ' ') &&
+        (inDeq.front() != '(' && inDeq.front() != ')') &&
+        (inDeq.front() != '+' && inDeq.front() != '-' && inDeq.front() != '*' && inDeq.front() != '/') &&
+        (inDeq.front() < '0' || inDeq.front() > '9') &&
+        (inDeq.front() < 'A' || inDeq.front() > 'Z') &&
+        (inDeq.front() < 'a' || inDeq.front() > 'z')) {
+            throw;
+        }
+
+        if (isInfix) {
+            if (inDeq.front() == '(') {
+                stack.pushBack('(');
             }
-            else
-            {
-                throw; // cannot have parentheses in non-infix
+            else if (inDeq.front() == ')') {
+                stack.popFront();
             }
         }
+
+        inDeq.popFront();
     }
-    if (!stack.isEmpty())
+
+    if (!stack.isEmpty()) {
         throw;
+    }
+
     return true;
 }
+
+//     // Check for any illegal characters
+//     if (
+//         (ch != '(' && ch != ')') &&
+//         (ch != '+' && ch != '-' && ch != '*' && ch != '/') &&
+//         (ch < '0' || ch > '9') &&
+//         (ch < 'A' || ch > 'Z') &&
+//         (ch < 'a' || ch > 'z'))
+//     {
+//         throw;
+//         }
+
+//         if (ch == 40 || ch == 41) {
+//             if (isInfix) {
+//                 if (ch == 40) {
+//                     stack.pushFront('(');
+//                 } else {
+//                     stack.popFront();
+//                 }
+//             }
+//             else {
+//                 //throw; // cannot have parentheses in non-infix
+//             }
+//         }
+//     }
+//     if (!stack.isEmpty())
+//         throw;
+//     return true;
+// }
 
 // int main() { // REMOVE BEFORE SUBMISSION
 //     NotationConverter NC;
