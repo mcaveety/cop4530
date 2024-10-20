@@ -105,15 +105,15 @@ std::string NotationConverter::prefixToInfix(std::string inStr) {
 }
 
 std::string NotationConverter::postfixToInfix(std::string inStr) {
-    return addWhitespace(prefixToInfix(postfixToPrefix(inStr)));
+    return prefixToInfix(postfixToPrefix(inStr));
 }
 
 std::string NotationConverter::infixToPrefix(std::string inStr) {
-    return addWhitespace(postfixToPrefix(infixToPostfix(inStr)));
+    return postfixToPrefix(infixToPostfix(inStr));
 }
 
 std::string NotationConverter::prefixToPostfix(std::string inStr) {
-    return addWhitespace(infixToPostfix(prefixToInfix(inStr)));
+    return infixToPostfix(prefixToInfix(inStr));
 }
 
 
@@ -140,22 +140,23 @@ std::string NotationConverter::addWhitespace(std::string inStr){
     Deque inDeq(inStr);
     Deque outDeq;
 
-    while (!inDeq.isEmpty()){
-        outDeq.pushBack(inDeq.front());
-        if (inDeq.front() == '(' && outDeq.back() == '('){
-            inDeq.popFront();
+    while (!inDeq.isEmpty()) {
+        outDeq.pushBack(inDeq.popFront());
+
+        if (inDeq.isEmpty()){
+            break;
+        }
+        if (outDeq.back() == '(') {
             continue;
         }
-
-        if (inDeq.front() == ')' && outDeq.back() == ')'){
-            inDeq.popFront();
+        else if (inDeq.front() == ')') {
             continue;
         }
-
-        inDeq.popFront();
-        if (!inDeq.isEmpty())
+        else {
             outDeq.pushBack(' ');
+        }
     }
+
     return outDeq.toString();
 }
 
@@ -209,4 +210,28 @@ bool NotationConverter::verify(std::string inStr, bool isInfix)
     if (!stack.isEmpty())
         throw;
     return true;
+}
+
+int main() { // REMOVE BEFORE SUBMISSION
+    NotationConverter NC;
+    std::cout << std::endl;
+
+    std::cout << NC.infixToPostfix("a + ((b -(c * ( d))))/ e/f*g*h-i+(((j)))/k + (m/(n/(p*z/q/(r))+s))") << std::endl;
+    std::cout << std::endl;
+
+    std::cout << NC.infixToPrefix("a + ((b -(c * ( d))))/ e/f*g*h-i+(((j)))/k + (m/(n/(p*z/q/(r))+s))") << std::endl; // giving errors
+    std::cout << std::endl;
+
+    std::cout << NC.prefixToInfix("- - - + - + - 9 7 8 2 4 / / / 3 9 7 8 * 2 4 3") << std::endl;
+    std::cout << std::endl;
+
+    std::cout << NC.prefixToPostfix("- - - + - + - 9 7 8 2 4 / / / 3 9 7 8 * 2 4 3") << std::endl;
+    std::cout << std::endl;
+
+    std::cout << NC.postfixToPrefix("9 7 - 8 + 2 - 4 + 3 9 / 7 / 8 / - 2 4 * - 3 -") << std::endl;
+    std::cout << std::endl;
+
+    std::cout << NC.postfixToInfix("9 7 - 8 + 2 - 4 + 3 9 / 7 / 8 / - 2 4 * - 3 -") << std::endl;
+    std::cout << std::endl;
+
 }
