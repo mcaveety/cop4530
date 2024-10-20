@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+
 // Header file with CalcList class definitions
 #include "CalcList.hpp"
 

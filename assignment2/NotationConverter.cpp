@@ -30,6 +30,7 @@ std::string NotationConverter::postfixToPrefix(std::string inStr) { // Implement
 }
 
 std::string NotationConverter::infixToPostfix(std::string inStr) { // Implement
+    bool stringOk = verify(inStr, true);
     Deque inDeq(stripWhitespace(inStr));
     Deque outDeq;
     Deque stack;
@@ -106,6 +107,10 @@ std::string NotationConverter::prefixToPostfix(std::string inStr) {
     return infixToPostfix(prefixToInfix(inStr));
 }
 
+
+// Housekeeping & Management Methods
+
+// Removes all extraneous whitespace from string input
 std::string NotationConverter::stripWhitespace(std::string inStr) {
     Deque dIn(inStr);
     Deque dOut;
@@ -117,6 +122,7 @@ std::string NotationConverter::stripWhitespace(std::string inStr) {
         dIn.popFront();
     }
 
+    // Returns deque as string
     return dOut.toString();
 }
 
