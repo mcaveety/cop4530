@@ -99,11 +99,7 @@ std::string NotationConverter::postfixToInfix(std::string inStr) {
 }
 
 std::string NotationConverter::infixToPrefix(std::string inStr) {
-    std::string inPost = infixToPostfix(inStr);
-
-    std::cout << inPost << std::endl; // FOR TESTING
-
-    return postfixToPrefix(inPost);
+    return postfixToPrefix(infixToPostfix(inStr));
 }
 
 std::string NotationConverter::prefixToPostfix(std::string inStr) {
@@ -178,30 +174,22 @@ int main() { // main function just for testing (remove before submission)
     NotationConverter NC;
     std::cout << std::endl;
 
-    // std::cout << NC.infixToPostfix("a + ((b -(c * ( d))))/ e/f*g*h-i+(((j)))/k + (m/(n/(p*/q/(r))+s))") << std::endl;
-    // std::cout << std::endl;
+    std::cout << NC.infixToPostfix("a + ((b -(c * ( d))))/ e/f*g*h-i+(((j)))/k + (m/(n/(p*z/q/(r))+s))") << std::endl;
+    std::cout << std::endl;
 
-    // std::cout << NC.infixToPrefix("a + ((b -(c * ( d))))/ e/f*g*h-i+(((j)))/k + (m/(n/(p*/q/(r))+s))") << std::endl; // giving errors
-    // std::cout << std::endl;
+    std::cout << NC.infixToPrefix("a + ((b -(c * ( d))))/ e/f*g*h-i+(((j)))/k + (m/(n/(p*z/q/(r))+s))") << std::endl; // giving errors
+    std::cout << std::endl;
 
-    // std::cout << NC.prefixToInfix("- - - + - + - 9 7 8 2 4 / / / 3 9 7 8 * 2 4 3") << std::endl;
-    // std::cout << std::endl;
+    std::cout << NC.prefixToInfix("- - - + - + - 9 7 8 2 4 / / / 3 9 7 8 * 2 4 3") << std::endl;
+    std::cout << std::endl;
 
-    // std::cout << NC.prefixToPostfix("- - - + - + - 9 7 8 2 4 / / / 3 9 7 8 * 2 4 3") << std::endl;
-    // std::cout << std::endl;
+    std::cout << NC.prefixToPostfix("- - - + - + - 9 7 8 2 4 / / / 3 9 7 8 * 2 4 3") << std::endl;
+    std::cout << std::endl;
 
-    // std::cout << NC.postfixToPrefix("9 7 - 8 + 2 - 4 + 3 9 / 7 / 8 / - 2 4 * - 3 -") << std::endl;
-    // std::cout << std::endl;
+    std::cout << NC.postfixToPrefix("9 7 - 8 + 2 - 4 + 3 9 / 7 / 8 / - 2 4 * - 3 -") << std::endl;
+    std::cout << std::endl;
 
-    // std::cout << NC.postfixToInfix("9 7 - 8 + 2 - 4 + 3 9 / 7 / 8 / - 2 4 * - 3 -") << std::endl;
-    // std::cout << std::endl;
-
-
-
-
-
-
-    std::cout << NC.postfixToPrefix("abcd*-e/f/g*h*+i-jk/+mnp*q/r//s+/") << std::endl;
+    std::cout << NC.postfixToInfix("9 7 - 8 + 2 - 4 + 3 9 / 7 / 8 / - 2 4 * - 3 -") << std::endl;
     std::cout << std::endl;
 
     return 0;
