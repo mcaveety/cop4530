@@ -212,26 +212,26 @@ bool NotationConverter::verify(std::string inStr, bool isInfix)
     return true;
 }
 
-int main() { // REMOVE BEFORE SUBMISSION
-    NotationConverter NC;
-    std::cout << std::endl;
+// int main() { // REMOVE BEFORE SUBMISSION
+//     NotationConverter NC;
+//     std::cout << std::endl;
 
-    std::cout << NC.infixToPostfix("a + ((b -(c * ( d))))/ e/f*g*h-i+(((j)))/k + (m/(n/(p*z/q/(r))+s))") << std::endl;
-    std::cout << std::endl;
+//     std::cout << NC.infixToPostfix("a + ((b -(c * ( d))))/ e/f*g*h-i+(((j)))/k + (m/(n/(p*z/q/(r))+s))") << std::endl;
+//     std::cout << std::endl;
 
-    std::cout << NC.infixToPrefix("a + ((b -(c * ( d))))/ e/f*g*h-i+(((j)))/k + (m/(n/(p*z/q/(r))+s))") << std::endl; // giving errors
-    std::cout << std::endl;
+//     std::cout << NC.infixToPrefix("a + ((b -(c * ( d))))/ e/f*g*h-i+(((j)))/k + (m/(n/(p*z/q/(r))+s))") << std::endl; // giving errors
+//     std::cout << std::endl;
 
-    std::cout << NC.prefixToInfix("- - - + - + - 9 7 8 2 4 / / / 3 9 7 8 * 2 4 3") << std::endl;
-    std::cout << std::endl;
+//     std::cout << NC.prefixToInfix("- - - + - + - 9 7 8 2 4 / / / 3 9 7 8 * 2 4 3") << std::endl;
+//     std::cout << std::endl;
 
-    std::cout << NC.prefixToPostfix("- - - + - + - 9 7 8 2 4 / / / 3 9 7 8 * 2 4 3") << std::endl;
-    std::cout << std::endl;
+//     std::cout << NC.prefixToPostfix("- - - + - + - 9 7 8 2 4 / / / 3 9 7 8 * 2 4 3") << std::endl;
+//     std::cout << std::endl;
 
-    std::cout << NC.postfixToPrefix("9 7 - 8 + 2 - 4 + 3 9 / 7 / 8 / - 2 4 * - 3 -") << std::endl;
-    std::cout << std::endl;
+//     std::cout << NC.postfixToPrefix("9 7 - 8 + 2 - 4 + 3 9 / 7 / 8 / - 2 4 * - 3 -") << std::endl;
+//     std::cout << std::endl;
 
-    std::cout << NC.postfixToInfix("9 7 - 8 + 2 - 4 + 3 9 / 7 / 8 / - 2 4 * - 3 -") << std::endl;
-    std::cout << std::endl;
+//     std::cout << NC.postfixToInfix("9 7 - 8 + 2 - 4 + 3 9 / 7 / 8 / - 2 4 * - 3 -") << std::endl;
+//     std::cout << std::endl;
 
-}
+// }
