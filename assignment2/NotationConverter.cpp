@@ -190,7 +190,7 @@ bool NotationConverter::verify(std::string inStr, bool isInfix)
         )
             throw;
 
-        if (ch == 40 or ch == 41)
+        if (ch == 40 || ch == 41)
         {
             if (isInfix)
             {
