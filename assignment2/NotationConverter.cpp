@@ -40,13 +40,14 @@ std::string NotationConverter::infixToPostfix(std::string inStr) { // Implement
                 outDeq.pushBack(stack.popFront());
             }
             stack.popFront();
+            inDeq.popFront();
             curPres--;
         }
         else if ((inDeq.front() == 43) || (inDeq.front() == 45)) { // If front of inDeq is + or -
             while ((!stack.isEmpty()) && (stack.frontPres() >= curPres)) {
                 outDeq.pushBack(stack.popFront());
             }
-            stack.pushFront(inDeq.popFront());
+            stack.pushFront(inDeq.popFront(), curPres);
         }
         else if ((inDeq.front() == 42) || (inDeq.front() == 47)) { // If front is inDeq is * or /
             while ((!stack.isEmpty()) && (stack.frontPres() >= curPres)) {
@@ -54,7 +55,7 @@ std::string NotationConverter::infixToPostfix(std::string inStr) { // Implement
                     break;
                 outDeq.pushBack(stack.popFront());
             }
-            stack.pushFront(inDeq.popFront());
+            stack.pushFront(inDeq.popFront(), curPres);
         }
     }
 
@@ -176,7 +177,7 @@ bool NotationConverter::verify(std::string inStr, bool isInfix)
 int main() { // main function just for testing (remove before submission)
     NotationConverter NC;
 
-    std::cout << NC.infixToPostfix("(4+5)*9") << std::endl;
+    std::cout << NC.infixToPostfix("1 + ((2 -(3 * ( 4))))/ 5/4*7*7-0+(((3)))/5 + (5/(6/(3*/2/(1))+1))") << std::endl;
 
     return 0;
 }
