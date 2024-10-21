@@ -146,7 +146,7 @@ std::string NotationConverter::addWhitespace(std::string inStr){
         if (inDeq.isEmpty()){
             break;
         }
-        if (outDeq.back() == '(') {
+        else if (outDeq.back() == '(') {
             continue;
         }
         else if (inDeq.front() == ')') {
