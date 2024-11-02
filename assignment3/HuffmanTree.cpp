@@ -22,5 +22,8 @@ std::map<char, int> HuffmanTree::giveFreqMap(std::string str) {
 }
 
 // int main() {
+
+//     // this is a test
+
 //     return 0;
 // }
