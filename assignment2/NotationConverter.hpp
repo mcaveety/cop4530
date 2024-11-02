@@ -28,7 +28,6 @@ class NotationConverter : public NotationConverterInterface {
         // Housekeeping & Management
         std::string stripWhitespace(std::string);
         std::string addWhitespace(std::string);
-        std::string validateWhitespace(std::string);
         bool verify(std::string, bool);
 
         std::string charToStr(char ch) const;
