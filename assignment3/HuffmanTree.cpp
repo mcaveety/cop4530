@@ -27,42 +27,60 @@ std::map<char, int> HuffmanTree::giveFreqMap(std::string str) {
     return freqMap;
 }
 
+
+// Compress input string to binary output using Huffman algorithm
 std::string HuffmanTree::compress(const std::string inputStr){
 
+    // Step 2: Create character frequency map
     HuffmanTree tree;
     std::map<char, int> freqmap = tree.giveFreqMap(inputStr);
     std::map<char,int>::iterator i;
     HeapQueue<HuffmanNode, HuffmanNode::Compare> minHeap;
 
-    // For each item in the frequency map, add a node to the minheap
+    // Step 3: Create minheap using character frequencies
     for(i = freqmap.begin(); i != freqmap.end(); i++){
+        // DEBUG: Display the frequencies of each character prior to addition
         std::cout << i->first << ": " << i->second << std::endl;
 
-        // Create temporary node
         HuffmanNode temp(i->first, i->second);
-
         minHeap.insert(temp);
     }
 
-    // Remove each minimum and print
-    std::cout << "Highest priority in minheap" << std::endl;
-    int length = minHeap.size();
-    for(int i = 0; i < length; i++){
-        HuffmanNode temp = minHeap.min();
-        minHeap.removeMin();
-        std::cout << temp.getCharacter() << ": " << temp.getFrequency() << std::endl;
-    }
-    std::cout << "Minheap is now empty" << std::endl;
+    // Step 4: Build the Huffman tree
+    // Note: this.root should point to the tree root
+    std::cout << "Beginning minHeap ---> Huffman Tree transformation..." << std::endl;
 
-    return "yay";
+    while (minHeap.size() > 1){
+        // Extract two highest priority items from minHeap
+        HuffmanNode min1 = minHeap.min();
+        minHeap.removeMin();
+        HuffmanNode min2 = minHeap.min();
+        minHeap.removeMin();
+
+        // Place sum node back in minHeap priority queue
+        HuffmanNode parent('\0', size_t(min1.getFrequency() + min2.getFrequency()));
+        minHeap.insert(parent);
+
+        // Convert to leaf nodes, with parent as sum
+        min1.parent = &parent;
+        min2.parent = &parent;
+        parent.left = &min1;
+        parent.right = &min2;
+        
+    }
+
+    std::cout << "Transformation complete" << std::endl;
+
+
+    return "<this is the compressed huffman string>";
 
 }
 
 std::string HuffmanTree::decompress(const std::string inputCode, const std::string serializedTree){
-    return "testing";
+    return "";
 }
 std::string HuffmanTree::serializeTree() const{
-    return "testing";
+    return "<serialized tree string>";
 }
 
 // Main function (remove before submission or test)
