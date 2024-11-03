@@ -17,9 +17,11 @@ class HuffmanTree : public HuffmanTreeBase {
         std::string decompress(const std::string inputCode, const std::string serializedTree);
 
         std::map<char, int> giveFreqMap(std::string str);
+        void generateCodes(HuffmanNode *node, std::string code, std::map<char, std::string> &codes);
+        HuffmanNode deserializeTree() const;
 
     private:
-        HuffmanNode *root = nullptr;  
+        HuffmanNode *root = nullptr;
 };
 
 
