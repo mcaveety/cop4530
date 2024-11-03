@@ -8,7 +8,7 @@
 #include "HeapQueue.hpp"
 
 
-// HELPER FUNCTIONS START >>>
+// MAIN FUNCTIONALITY START >>>
 // Helper method to build character frequency map
 std::map<char, int> HuffmanTree::giveFreqMap(std::string str) {
     std::map<char, int> freqMap;
@@ -49,10 +49,9 @@ void HuffmanTree::generateCodes(HuffmanNode *node, std::string code, std::map<ch
     generateCodes(node->right, code + "1", codes);
 
 }
-// HELPER FUNCTIONS END <<<
 
 
-// MAIN FUNCTIONALITY START >>>
+
 // Compresses input string to binary output using Huffman Coding
 std::string HuffmanTree::compress(const std::string inputStr){
 
@@ -91,19 +90,32 @@ std::string HuffmanTree::compress(const std::string inputStr){
 
 
     // Defines root node as sum of all frequencies; last node on minheap
-    HuffmanNode *root = minHeap.min();
+    tree.root = minHeap.min();
 
     // Prints tree status
     std::cout << "Transformation complete" << std::endl;
-    std::cout << "Root node of tree: " << root->getFrequency() << std::endl;
+    std::cout << "Root node of tree: " << tree.root->getFrequency() << std::endl;
 
     // Step 5a: Encode the string using HuffmanTree
     std::map<char, std::string> charCodes; // Map of character codes
 
     // Generate character codes
-    tree.generateCodes(root, "", charCodes);
+    tree.generateCodes(tree.root, "", charCodes);
+    std::map<char, std::string>::iterator j;
 
-    return "<compressed huffman string>";
+    for(j = charCodes.begin(); j != charCodes.end(); j++){
+        // DEBUG
+        std::cout << j->first << ": " << j->second << std::endl;
+    }
+
+    std::string huffmanString = "";
+    int c;
+    for (c = 0; c < int(inputStr.length()); c++){
+        huffmanString += charCodes.find(inputStr[c])->second;
+    }
+
+    std::cout << huffmanString << std::endl;
+    return huffmanString;
 
 }
 
@@ -118,7 +130,14 @@ std::string HuffmanTree::decompress(const std::string inputCode, const std::stri
 std::string HuffmanTree::serializeTree() const{
 
     // Step 5b: Post-order algorithm to serialize the Huffman Tree
+    // Must use data from t.root to understand tree structure
     return "<serialized tree string>";
+}
+
+
+// Helper method to deserialize tree during decompression process
+HuffmanNode HuffmanTree::deserializeTree() const{
+    return;
 }
 // MAIN FUNCTIONALITY END <<<
 
@@ -126,7 +145,7 @@ std::string HuffmanTree::serializeTree() const{
 // Main function (remove before submission or test)
 int main() {
 
-    std::string test = "The quick brown fox jumped over the lazy dog.";
+    std::string test = "if a machine is expected to be infallible it cannot also be intelligent";
     HuffmanTree t;
     t.compress(test);
 
