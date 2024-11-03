@@ -61,7 +61,7 @@ std::string HuffmanTree::compress(const std::string inputStr){
     HuffmanTree tree;
     std::map<char, int> freqmap = tree.giveFreqMap(inputStr);
     std::map<char,int>::iterator i;
-    HeapQueue<HuffmanNode, HuffmanNode::Compare> minHeap;
+    HeapQueue<HuffmanNode*, HuffmanNode::Compare> minHeap;
 
 
     // Step 3: Create minheap using character frequencies
@@ -69,7 +69,7 @@ std::string HuffmanTree::compress(const std::string inputStr){
         // DEBUG: Display the frequencies of each character prior to addition
         std::cout << i->first << ": " << i->second << std::endl;
 
-        HuffmanNode temp(i->first, i->second);
+        HuffmanNode *temp = new HuffmanNode(i->first, i->second);
         minHeap.insert(temp);
     }
 
@@ -79,35 +79,29 @@ std::string HuffmanTree::compress(const std::string inputStr){
     
     while (minHeap.size() > 1){
         // Extract two highest priority items from minHeap
-        HuffmanNode temp1 = minHeap.min();
+        HuffmanNode *temp1 = minHeap.min();
         minHeap.removeMin();
-        HuffmanNode temp2 = minHeap.min();
+        HuffmanNode *temp2 = minHeap.min();
         minHeap.removeMin();
-
-        // Create new memory objects for these minimum nodes
-        HuffmanNode *min1 = new HuffmanNode(temp1.getCharacter(), temp1.getFrequency());
-        HuffmanNode *min2 = new HuffmanNode(temp2.getCharacter(), temp2.getFrequency());
 
         // Place sum node back in minHeap priority queue, with two minimums as children
-        HuffmanNode parent('\0', size_t(temp1.getFrequency() + temp2.getFrequency()), nullptr, min1, min2); // << pointers are overwritten on each loop
-        minHeap.insert(parent);
+        HuffmanNode *sum = new HuffmanNode('\0', size_t(temp1->getFrequency() + temp2->getFrequency()), nullptr, temp1, temp2);
+        minHeap.insert(sum);
     }
 
 
     // Defines root node as sum of all frequencies; last node on minheap
-    HuffmanNode root = minHeap.min();
-    HuffmanNode temp = root;
+    HuffmanNode *root = minHeap.min();
 
     // Prints tree status
     std::cout << "Transformation complete" << std::endl;
-    std::cout << "Root node of tree: " << root.getFrequency() << std::endl;
-
+    std::cout << "Root node of tree: " << root->getFrequency() << std::endl;
 
     // Step 5a: Encode the string using HuffmanTree
     std::map<char, std::string> charCodes; // Map of character codes
 
     // Generate character codes
-    tree.generateCodes(&root, "", charCodes);
+    tree.generateCodes(root, "", charCodes);
 
     return "<compressed huffman string>";
 
