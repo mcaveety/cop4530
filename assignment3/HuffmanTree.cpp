@@ -8,7 +8,7 @@
 #include "HeapQueue.hpp"
 
 
-// HELPER FUNCTIONS START >>>
+// MAIN FUNCTIONALITY START >>>
 // Helper method to build character frequency map
 std::map<char, int> HuffmanTree::giveFreqMap(std::string str) {
     std::map<char, int> freqMap;
@@ -49,10 +49,9 @@ void HuffmanTree::generateCodes(HuffmanNode *node, std::string code, std::map<ch
     generateCodes(node->right, code + "1", codes);
 
 }
-// HELPER FUNCTIONS END <<<
 
 
-// MAIN FUNCTIONALITY START >>>
+
 // Compresses input string to binary output using Huffman Coding
 std::string HuffmanTree::compress(const std::string inputStr){
 
@@ -134,12 +133,13 @@ std::string HuffmanTree::serializeTree() const{
     // Must use data from t.root to understand tree structure
     return "<serialized tree string>";
 }
-// MAIN FUNCTIONALITY END <<<
 
-std::string HuffmanTree::deserializeTree() const{
 
-    return "";
+// Helper method to deserialize tree during decompression process
+HuffmanNode HuffmanTree::deserializeTree() const{
+    return;
 }
+// MAIN FUNCTIONALITY END <<<
 
 
 // Main function (remove before submission or test)
