@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include <stack>
 
 #include "HuffmanTree.hpp"
 #include "HuffmanBase.hpp"
@@ -136,8 +137,41 @@ std::string HuffmanTree::serializeTree() const{
 
 
 // Helper method to deserialize tree during decompression process
-HuffmanNode HuffmanTree::deserializeTree() const{
-    return;
+HuffmanNode *HuffmanTree::deserializeTree(std::string serialized) const{
+    // Reverse serialization by traversing in a reverse-postorder process.
+    std::stack<HuffmanNode*> nodeStack;
+
+    // L LdLgBLhLmBBLpLxBLfBBLiBBLeLsLbBLaBBLcLoBLlBLnLtBBBB
+    int len = serialized.length();
+    for (int i = 0; i < len; i++){
+        if (serialized[i] == 'L'){
+            i++; // move to character following L
+            nodeStack.push(new HuffmanNode(serialized[i], 0));
+        }
+        else if (serialized[i] == 'B'){
+            if (nodeStack.size() < 2){
+                throw std::runtime_error("Invalid serialization format: Not enough nodes for a branch");
+            }
+            
+            HuffmanNode *right = nodeStack.top();
+            nodeStack.pop();
+            HuffmanNode *left = nodeStack.top();
+            nodeStack.pop();
+
+            // Create a branch node with the children
+            HuffmanNode *parent = new HuffmanNode('\0', 0, nullptr, left, right);
+            nodeStack.push(parent);
+        }
+    }
+
+    // After processing all nodes, the stack should have exactly one element: the root
+    if (nodeStack.size() != 1) {
+        throw std::runtime_error("Invalid serialization format: Final stack size is not 1");
+    }
+
+    HuffmanNode *root = nodeStack.top();
+    nodeStack.pop();
+    return root;
 }
 // MAIN FUNCTIONALITY END <<<
 
