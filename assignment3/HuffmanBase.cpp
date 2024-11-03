@@ -1,3 +1,9 @@
+#include <cstddef>
+#include <string>
+#include <iostream>
+#include <map>
+
+#include "HuffmanTree.hpp"
 #include "HuffmanBase.hpp"
 
 char HuffmanNode::getCharacter() const
