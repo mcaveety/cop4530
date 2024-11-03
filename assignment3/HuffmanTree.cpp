@@ -7,6 +7,9 @@
 #include "HuffmanBase.hpp"
 #include "HeapQueue.hpp"
 
+
+// HELPER FUNCTIONS START >>>
+// Helper method to build character frequency map
 std::map<char, int> HuffmanTree::giveFreqMap(std::string str) {
     std::map<char, int> freqMap;
     std::map<char, int>::iterator it;
@@ -27,61 +30,98 @@ std::map<char, int> HuffmanTree::giveFreqMap(std::string str) {
     return freqMap;
 }
 
+// Helper method to generate Huffman Codes recursively
+void HuffmanTree::generateCodes(HuffmanNode *node, std::string code, std::map<char, std::string> &codes){
 
-// Compress input string to binary output using Huffman algorithm
+    // Return previous level when nullptr encountered
+    if (node == nullptr) return;
+
+    // If leaf node encountered, store character code in map
+    if (node->isLeaf()) {
+        codes[node->getCharacter()] = code;
+        return;
+    }
+
+    // Recurse left, appending '0' to the code
+    generateCodes(node->left, code + "0", codes);
+
+    // Recurse right, appending '1' to the code
+    generateCodes(node->right, code + "1", codes);
+
+}
+// HELPER FUNCTIONS END <<<
+
+
+// MAIN FUNCTIONALITY START >>>
+// Compresses input string to binary output using Huffman Coding
 std::string HuffmanTree::compress(const std::string inputStr){
+
 
     // Step 2: Create character frequency map
     HuffmanTree tree;
     std::map<char, int> freqmap = tree.giveFreqMap(inputStr);
     std::map<char,int>::iterator i;
-    HeapQueue<HuffmanNode, HuffmanNode::Compare> minHeap;
+    HeapQueue<HuffmanNode*, HuffmanNode::Compare> minHeap;
+
 
     // Step 3: Create minheap using character frequencies
     for(i = freqmap.begin(); i != freqmap.end(); i++){
         // DEBUG: Display the frequencies of each character prior to addition
         std::cout << i->first << ": " << i->second << std::endl;
 
-        HuffmanNode temp(i->first, i->second);
+        HuffmanNode *temp = new HuffmanNode(i->first, i->second);
         minHeap.insert(temp);
     }
 
-    // Step 4: Build the Huffman tree
-    // Note: this.root should point to the tree root
-    std::cout << "Beginning minHeap ---> Huffman Tree transformation..." << std::endl;
 
+    // Step 4: Build the Huffman tree
+    std::cout << "Beginning minHeap ---> Huffman Tree transformation..." << std::endl;
+    
     while (minHeap.size() > 1){
         // Extract two highest priority items from minHeap
-        HuffmanNode min1 = minHeap.min();
+        HuffmanNode *temp1 = minHeap.min();
         minHeap.removeMin();
-        HuffmanNode min2 = minHeap.min();
+        HuffmanNode *temp2 = minHeap.min();
         minHeap.removeMin();
 
-        // Place sum node back in minHeap priority queue
-        HuffmanNode parent('\0', size_t(min1.getFrequency() + min2.getFrequency()));
-        minHeap.insert(parent);
-
-        // Convert to leaf nodes, with parent as sum
-        min1.parent = &parent;
-        min2.parent = &parent;
-        parent.left = &min1;
-        parent.right = &min2;
-        
+        // Place sum node back in minHeap priority queue, with two minimums as children
+        HuffmanNode *sum = new HuffmanNode('\0', size_t(temp1->getFrequency() + temp2->getFrequency()), nullptr, temp1, temp2);
+        minHeap.insert(sum);
     }
 
+
+    // Defines root node as sum of all frequencies; last node on minheap
+    HuffmanNode *root = minHeap.min();
+
+    // Prints tree status
     std::cout << "Transformation complete" << std::endl;
+    std::cout << "Root node of tree: " << root->getFrequency() << std::endl;
 
+    // Step 5a: Encode the string using HuffmanTree
+    std::map<char, std::string> charCodes; // Map of character codes
 
-    return "<this is the compressed huffman string>";
+    // Generate character codes
+    tree.generateCodes(root, "", charCodes);
+
+    return "<compressed huffman string>";
 
 }
+
 
 std::string HuffmanTree::decompress(const std::string inputCode, const std::string serializedTree){
+
+    // Step 6: Use encoded text and serialized Huffman tree to decompress string
     return "";
 }
+
+
 std::string HuffmanTree::serializeTree() const{
+
+    // Step 5b: Post-order algorithm to serialize the Huffman Tree
     return "<serialized tree string>";
 }
+// MAIN FUNCTIONALITY END <<<
+
 
 // Main function (remove before submission or test)
 int main() {
