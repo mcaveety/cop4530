@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include <stack>
 
 #include "HuffmanTree.hpp"
 #include "HuffmanBase.hpp"
@@ -57,8 +58,7 @@ std::string HuffmanTree::compress(const std::string inputStr){
 
 
     // Step 2: Create character frequency map
-    HuffmanTree tree;
-    std::map<char, int> freqmap = tree.giveFreqMap(inputStr);
+    std::map<char, int> freqmap = giveFreqMap(inputStr);
     std::map<char,int>::iterator i;
     HeapQueue<HuffmanNode*, HuffmanNode::Compare> minHeap;
 
@@ -90,17 +90,17 @@ std::string HuffmanTree::compress(const std::string inputStr){
 
 
     // Defines root node as sum of all frequencies; last node on minheap
-    tree.root = minHeap.min();
+    root = minHeap.min();
 
     // Prints tree status
     std::cout << "Transformation complete" << std::endl;
-    std::cout << "Root node of tree: " << tree.root->getFrequency() << std::endl;
+    std::cout << "Root node of tree: " << root->getFrequency() << std::endl;
 
     // Step 5a: Encode the string using HuffmanTree
     std::map<char, std::string> charCodes; // Map of character codes
 
     // Generate character codes
-    tree.generateCodes(tree.root, "", charCodes);
+    generateCodes(root, "", charCodes);
     std::map<char, std::string>::iterator j;
 
     for(j = charCodes.begin(); j != charCodes.end(); j++){
@@ -115,6 +115,7 @@ std::string HuffmanTree::compress(const std::string inputStr){
     }
 
     std::cout << huffmanString << std::endl;
+
     return huffmanString;
 
 }
@@ -123,7 +124,28 @@ std::string HuffmanTree::compress(const std::string inputStr){
 std::string HuffmanTree::decompress(const std::string inputCode, const std::string serializedTree){
 
     // Step 6: Use encoded text and serialized Huffman tree to decompress string
-    return "";
+    HuffmanNode *root = deserializeTree(serializedTree);
+    std::string decompressed = "";
+    int len = inputCode.length();
+    int i;
+
+    // Traverse each value in the string
+    HuffmanNode *temp = root;
+    for (i = 0; i < len; i++){
+        if (temp->isLeaf()){
+            decompressed += temp->getCharacter();
+            temp = root;
+            continue;
+        }
+        if (inputCode[i] == '0'){
+            temp = temp->left;
+        }
+        else { // == '1'
+            temp = temp->right;
+        }
+    }
+
+    return decompressed;
 }
 
 
@@ -136,8 +158,41 @@ std::string HuffmanTree::serializeTree() const{
 
 
 // Helper method to deserialize tree during decompression process
-HuffmanNode HuffmanTree::deserializeTree() const{
-    return;
+HuffmanNode *HuffmanTree::deserializeTree(std::string serialized) const{
+    // Reverse serialization by traversing in a reverse-postorder process.
+    std::stack<HuffmanNode*> nodeStack;
+
+    // L LdLgBLhLmBBLpLxBLfBBLiBBLeLsLbBLaBBLcLoBLlBLnLtBBBB
+    int len = serialized.length();
+    for (int i = 0; i < len; i++){
+        if (serialized[i] == 'L'){
+            i++; // move to character following L
+            nodeStack.push(new HuffmanNode(serialized[i], 0));
+        }
+        else if (serialized[i] == 'B'){
+            if (nodeStack.size() < 2){
+                throw std::runtime_error("Invalid serialization format: Not enough nodes for a branch");
+            }
+            
+            HuffmanNode *right = nodeStack.top();
+            nodeStack.pop();
+            HuffmanNode *left = nodeStack.top();
+            nodeStack.pop();
+
+            // Create a branch node with the children
+            HuffmanNode *parent = new HuffmanNode('\0', 0, nullptr, left, right);
+            nodeStack.push(parent);
+        }
+    }
+
+    // After processing all nodes, the stack should have exactly one element: the root
+    if (nodeStack.size() != 1) {
+        throw std::runtime_error("Invalid serialization format: Final stack size is not 1");
+    }
+
+    HuffmanNode *root = nodeStack.top();
+    nodeStack.pop();
+    return root;
 }
 // MAIN FUNCTIONALITY END <<<
 
@@ -149,5 +204,6 @@ int main() {
     HuffmanTree t;
     t.compress(test);
 
+    //std::cout << t.root->getCharacter() << ": " << t.root->getFrequency() << std::endl;
     return 0;
 }
