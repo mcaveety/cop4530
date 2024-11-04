@@ -58,8 +58,7 @@ std::string HuffmanTree::compress(const std::string inputStr){
 
 
     // Step 2: Create character frequency map
-    HuffmanTree tree;
-    std::map<char, int> freqmap = tree.giveFreqMap(inputStr);
+    std::map<char, int> freqmap = giveFreqMap(inputStr);
     std::map<char,int>::iterator i;
     HeapQueue<HuffmanNode*, HuffmanNode::Compare> minHeap;
 
@@ -91,17 +90,17 @@ std::string HuffmanTree::compress(const std::string inputStr){
 
 
     // Defines root node as sum of all frequencies; last node on minheap
-    tree.root = minHeap.min();
+    root = minHeap.min();
 
     // Prints tree status
     std::cout << "Transformation complete" << std::endl;
-    std::cout << "Root node of tree: " << tree.root->getFrequency() << std::endl;
+    std::cout << "Root node of tree: " << root->getFrequency() << std::endl;
 
     // Step 5a: Encode the string using HuffmanTree
     std::map<char, std::string> charCodes; // Map of character codes
 
     // Generate character codes
-    tree.generateCodes(tree.root, "", charCodes);
+    generateCodes(root, "", charCodes);
     std::map<char, std::string>::iterator j;
 
     for(j = charCodes.begin(); j != charCodes.end(); j++){
@@ -116,6 +115,7 @@ std::string HuffmanTree::compress(const std::string inputStr){
     }
 
     std::cout << huffmanString << std::endl;
+
     return huffmanString;
 
 }
@@ -124,7 +124,28 @@ std::string HuffmanTree::compress(const std::string inputStr){
 std::string HuffmanTree::decompress(const std::string inputCode, const std::string serializedTree){
 
     // Step 6: Use encoded text and serialized Huffman tree to decompress string
-    return "";
+    HuffmanNode *root = deserializeTree(serializedTree);
+    std::string decompressed = "";
+    int len = inputCode.length();
+    int i;
+
+    // Traverse each value in the string
+    HuffmanNode *temp = root;
+    for (i = 0; i < len; i++){
+        if (temp->isLeaf()){
+            decompressed += temp->getCharacter();
+            temp = root;
+            continue;
+        }
+        if (inputCode[i] == '0'){
+            temp = temp->left;
+        }
+        else { // == '1'
+            temp = temp->right;
+        }
+    }
+
+    return decompressed;
 }
 
 
@@ -183,5 +204,6 @@ int main() {
     HuffmanTree t;
     t.compress(test);
 
+    //std::cout << t.root->getCharacter() << ": " << t.root->getFrequency() << std::endl;
     return 0;
 }
