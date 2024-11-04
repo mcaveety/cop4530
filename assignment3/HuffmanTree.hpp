@@ -22,7 +22,7 @@ class HuffmanTree : public HuffmanTreeBase {
         void postorderCharStr(HuffmanNode *Node, std::string &inStr) const;
         void postorderLeafAndBranchStr(HuffmanNode *Node, std::string &instr) const;
 
-    public: // CHANGE BACK TO private
+    private:
         HuffmanNode *root = nullptr;
 };
 

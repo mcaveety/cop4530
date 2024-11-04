@@ -65,17 +65,12 @@ std::string HuffmanTree::compress(const std::string inputStr){
 
     // Step 3: Create minheap using character frequencies
     for(i = freqmap.begin(); i != freqmap.end(); i++){
-        // DEBUG: Display the frequencies of each character prior to addition
-        std::cout << i->first << ": " << i->second << std::endl;
-
         HuffmanNode *temp = new HuffmanNode(i->first, i->second);
         minHeap.insert(temp);
     }
 
 
     // Step 4: Build the Huffman tree
-    std::cout << "Beginning minHeap ---> Huffman Tree transformation..." << std::endl;
-    
     while (minHeap.size() > 1){
         // Extract two highest priority items from minHeap
         HuffmanNode *temp1 = minHeap.min();
@@ -93,9 +88,6 @@ std::string HuffmanTree::compress(const std::string inputStr){
     root = minHeap.min();
 
     // Prints tree status
-    std::cout << "Transformation complete" << std::endl;
-    std::cout << "Root node of tree: " << root->getFrequency() << std::endl;
-
     // Step 5a: Encode the string using HuffmanTree
     std::map<char, std::string> charCodes; // Map of character codes
 
@@ -103,18 +95,11 @@ std::string HuffmanTree::compress(const std::string inputStr){
     generateCodes(root, "", charCodes);
     std::map<char, std::string>::iterator j;
 
-    for(j = charCodes.begin(); j != charCodes.end(); j++){
-        // DEBUG
-        std::cout << j->first << ": " << j->second << std::endl;
-    }
-
     std::string huffmanString = "";
     int c;
     for (c = 0; c < int(inputStr.length()); c++){
         huffmanString += charCodes.find(inputStr[c])->second;
     }
-
-    std::cout << huffmanString << std::endl;
 
     return huffmanString;
 
@@ -129,14 +114,12 @@ std::string HuffmanTree::decompress(const std::string inputCode, const std::stri
     int len = inputCode.length();
     int i;
 
-    std::cout << "Beginning decompression..." << std::endl;
     // Traverse each value in the string
     HuffmanNode *temp = root;
     for (i = 0; i < len + 1; i++){
         if (temp->isLeaf()){
             // When a leaf node is encountered, stop, return character, and then go back to the beginning
             decompressed += temp->getCharacter();
-            std::cout << temp->getCharacter() << " found when i=" << i << std::endl;
             temp = root;
             i--;
             continue;
@@ -153,7 +136,8 @@ std::string HuffmanTree::decompress(const std::string inputCode, const std::stri
 }
 
 
-std::string HuffmanTree::serializeTree() const { // const was here
+std::string HuffmanTree::serializeTree() const {
+    // Step 5b: Post-order algorithm to serialize the Huffman Tree
     std::string charStr = "";
     std::string leafnBranchStr = "";
     std::string outStr = "";
@@ -176,9 +160,6 @@ std::string HuffmanTree::serializeTree() const { // const was here
 
     return outStr;
 
-    // Step 5b: Post-order algorithm to serialize the Huffman Tree
-    // Must use data from t.root to understand tree structure
-    // return "<serialized tree string>";
 }
 
 // Returns string of chars in post order
@@ -196,6 +177,7 @@ void HuffmanTree::postorderCharStr(HuffmanNode *Node, std::string &inStr) const 
     }
 }
 
+// Helper function for tree serialization
 void HuffmanTree::postorderLeafAndBranchStr(HuffmanNode *Node, std::string &inStr) const {
     if (Node == nullptr) {
         return;
@@ -218,20 +200,13 @@ HuffmanNode *HuffmanTree::deserializeTree(std::string serialized) const{
     // Reverse serialization by traversing in a reverse-postorder process.
     std::stack<HuffmanNode*> nodeStack;
 
-    // L LdLgBLhLmBBLpLxBLfBBLiBBLeLsLbBLaBBLcLoBLlBLnLtBBBB
     int len = serialized.length();
     for (int i = 0; i < len; i++){
         if (serialized[i] == 'L'){
             i++; // move to character following L
-            nodeStack.push(new HuffmanNode(serialized[i], 0));
-            std::cout << "Character found: " << serialized[i] << std::endl; 
+            nodeStack.push(new HuffmanNode(serialized[i], 0)); 
         }
         else if (serialized[i] == 'B'){
-            if (nodeStack.size() < 2){
-                throw std::runtime_error("Invalid serialization format: Not enough nodes for a branch");
-            }
-            
-            std::cout << "Branch found" << std::endl;
 
             HuffmanNode *right = nodeStack.top();
             nodeStack.pop();
@@ -241,13 +216,7 @@ HuffmanNode *HuffmanTree::deserializeTree(std::string serialized) const{
             // Create a branch node with the children
             HuffmanNode *parent = new HuffmanNode('\0', 0, nullptr, left, right);
             nodeStack.push(parent);
-            std::cout << "Branch is parent of: '" << parent->left->getCharacter() << "', '" << parent->right->getCharacter() << "'" << std::endl;
         }
-    }
-
-    // After processing all nodes, the stack should have exactly one element: the root
-    if (nodeStack.size() != 1) {
-        throw std::runtime_error("Invalid serialization format: Final stack size is not 1");
     }
 
     HuffmanNode *root = nodeStack.top();
@@ -258,17 +227,14 @@ HuffmanNode *HuffmanTree::deserializeTree(std::string serialized) const{
 
 
 // Main function (remove before submission or test)
-int main() {
+// int main() {
 
-    std::string test = "if a machine is expected to be infallible it cannot also be intelligent";
-    HuffmanTree t;
-    std::string testEncode = t.compress(test);
-    std::string testSerialized = t.serializeTree();
+//     std::string test = "It is time to unmask the computing community as a Secret Society for the Creation and Preservation of Artificial Complexity";
+//     HuffmanTree t;
+//     std::string testEncode = t.compress(test);
+//     std::string testSerialized = t.serializeTree();
 
-    std::cout << t.serializeTree() << std::endl;
+//     std::string test2 = t.decompress(testEncode, testSerialized);
 
-    std::string test2 = t.decompress(testEncode, testSerialized);
-    std::cout << test2 << std::endl;
-
-    return 0;
-}
+//     return 0;
+// }
