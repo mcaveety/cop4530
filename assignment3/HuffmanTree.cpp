@@ -127,18 +127,39 @@ std::string HuffmanTree::decompress(const std::string inputCode, const std::stri
 }
 
 
-std::string HuffmanTree::serializeTree() const{
+std::string HuffmanTree::serializeTree() const { // const was here
+    std::string charStr = "test";
+    std::string leafAndBranchStr = "";
+    std::string outStr = "";
+
+    postorderCharStr(root, charStr);
+
+    return charStr;
 
     // Step 5b: Post-order algorithm to serialize the Huffman Tree
     // Must use data from t.root to understand tree structure
-    return "<serialized tree string>";
+    // return "<serialized tree string>";
 }
 
+// Returns string of chars in post order
+void HuffmanTree::postorderCharStr(HuffmanNode *Node, std::string inStr) const {
+    if (Node == nullptr) {
+        std::cout << "NULL Node" << std::endl;
+        return;
+    }
 
-// Helper method to deserialize tree during decompression process
-HuffmanNode HuffmanTree::deserializeTree() const{
-    return;
+    postorderCharStr(Node->left, inStr);
+    postorderCharStr(Node->right, inStr);
+
+    if (Node->isLeaf()) {
+        inStr += Node->getCharacter();
+    }
 }
+
+// // Helper method to deserialize tree during decompression process
+// HuffmanNode HuffmanTree::deserializeTree() const{
+//     return;
+// }
 // MAIN FUNCTIONALITY END <<<
 
 
@@ -148,6 +169,10 @@ int main() {
     std::string test = "if a machine is expected to be infallible it cannot also be intelligent";
     HuffmanTree t;
     t.compress(test);
+
+    std::cout << (t.root)->getFrequency() << " total characters in string " << std::endl;
+
+    // std::cout << t.serializeTree() << std::endl;
 
     return 0;
 }
