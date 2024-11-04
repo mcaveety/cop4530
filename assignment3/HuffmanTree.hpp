@@ -18,8 +18,9 @@ class HuffmanTree : public HuffmanTreeBase {
 
         std::map<char, int> giveFreqMap(std::string str);
         void generateCodes(HuffmanNode *node, std::string code, std::map<char, std::string> &codes);
-        HuffmanNode *deserializeTree() const;
-        void postorderCharStr(HuffmanNode *Node, std::string inStr) const;
+        HuffmanNode *deserializeTree(std::string serialized) const;
+        void postorderCharStr(HuffmanNode *Node, std::string &inStr) const;
+        void postorderLeafAndBranchStr(HuffmanNode *Node, std::string &instr) const;
 
     public: // CHANGE BACK TO private
         HuffmanNode *root = nullptr;
