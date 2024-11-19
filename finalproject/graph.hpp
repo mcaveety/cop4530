@@ -1,1 +1,1 @@
-// Group-defined header file
+// Group-defined graph.hpp header file
