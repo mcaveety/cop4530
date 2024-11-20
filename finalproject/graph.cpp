@@ -13,8 +13,9 @@ void AdjList::removeVertex(std::string label) {
     while (it != graph.end()) {
         if (it->name == label) {
             graph.erase(it);
+            return;
         }
-        
+
         it++;
     }
 }
