@@ -6,16 +6,6 @@
 
 class AdjList {
 private:
-    /*class Vert {
-    public:
-        Vert(std::string str) { name = str; }
-        std::string name;
-        bool explored = false;
-        int distance = 999999;
-        Vert *lastVisted = nullptr;
-        Neighbor* first;
-    };*/
-
     class Neighbor {
     public:
         std::string name;
@@ -38,7 +28,6 @@ private:
     };
 
     std::vector<Vert> graph;
-    int nextVertIndex = 0;
 
 public:
     void addVertex(std::string label);
