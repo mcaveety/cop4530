@@ -34,7 +34,6 @@ private:
     };
 
     std::vector<Vert> graph;
-    int nextVertIndex = 0;
 
 public:
     void addVertex(std::string label);
