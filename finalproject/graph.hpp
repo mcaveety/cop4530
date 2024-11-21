@@ -6,21 +6,31 @@
 
 class AdjList {
 private:
-    class Vert {
+    /*class Vert {
     public:
         Vert(std::string str) { name = str; }
         std::string name;
-        bool explored;
+        bool explored = false;
         int distance = 999999;
         Vert *lastVisted = nullptr;
-    };
+        Neighbor* first;
+    };*/
 
     class Neighbor {
     public:
-        Neighbor();
-        char name;
+        std::string name;
         int weight;
         Neighbor *next = nullptr;
+        Neighbor();
+    };
+    class Vert { 
+    public:
+        Vert(std::string str) { name = str; }
+        std::string name;
+        bool explored = false;
+        int distance = 999999;
+        Vert *lastVisted = nullptr;
+        Neighbor* first = nullptr;
     };
 
     std::vector<Vert> graph;
