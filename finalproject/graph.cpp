@@ -36,9 +36,6 @@ void AdjList::addEdge(std::string label1, std::string label2, unsigned long weig
 }
 
 void AdjList::removeEdge(std::string label, std::string label2) {
-
-    std::cout << "removeEdge called" << std::endl;
-
     std::vector<Vert>::iterator it;
         it = graph.begin();
 
@@ -141,6 +138,7 @@ void AdjList::removeVertex(std::string label) {
 }
 
 void AdjList::printAllVert() {
+    std::cout << "This is all Vertices: " << std::endl;
     std::vector<Vert>::iterator it;
     it = graph.begin();
 
@@ -151,6 +149,8 @@ void AdjList::printAllVert() {
 }
 
 void AdjList::printAll() {
+    std::cout << "This is all vertices and edges: " << std::endl;
+
     if (graph.empty()) 
         return;
 
@@ -171,27 +171,18 @@ void AdjList::printAll() {
     }
 }
 
-// AdjList::~AdjList() {
-//     std::vector<Vert>::iterator it;
-//     while (it != graph.end()) {
-//         while (it->first != nullptr) {
-//             Neighbor *temp = it->first;
-//             it->first = temp->next;
-//             delete temp;
-//         }
-//         it++;
-//     }
-//     graph.clear();
-// }
-
 AdjList::~AdjList() {
     std::vector<Vert>::iterator it;
     it = graph.begin();
+    Neighbor *temp = it->first;
+
     while (it != graph.end()) {
         while (it->first != nullptr) {
-            Neighbor *temp = it->first;
+            temp = it->first;
             removeEdge(it->name, temp->name);
         }
         it++;
     }
+
+    graph.clear();
 }

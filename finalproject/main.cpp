@@ -19,13 +19,13 @@ int main() {
 
     // g1.removeEdge("v1", "v2");
 
-    g1.printAll();
-    std::cout << std::endl;
+    // g1.printAll();
+    // std::cout << std::endl;
 
-    g1.~AdjList();
+    // g1.~AdjList();
 
-    g1.printAll();
-    std::cout << std::endl;
+    // g1.printAll();
+    // std::cout << std::endl;
 
     // g1.removeVertex("v3");
 
