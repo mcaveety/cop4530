@@ -18,7 +18,7 @@ private:
         Vert(std::string str) { name = str; }
         std::string name;
         bool explored = false;
-        int distance = 999999;
+        int distance = -1;
         Vert *lastVisted = nullptr;
         Neighbor* first = nullptr;
     };
@@ -40,6 +40,8 @@ public:
     void printAllVert();
 
     void printAll();
+
+    ~AdjList();
 };
 
 #endif
