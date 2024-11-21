@@ -2,8 +2,8 @@
 #include "graph.hpp"
 
 void AdjList::addVertex(std::string label) {
-    class Vert temp(label);
-    graph.push_back(temp);
+    Vert *temp = new Vert(label);
+    graph.push_back(*temp);
 }
 
 void AdjList::addEdge(std::string label1, std::string label2, unsigned long weight) {
@@ -25,144 +25,14 @@ void AdjList::addEdge(std::string label1, std::string label2, unsigned long weig
         return;
     }
 
-    // First neighbor of both Vertices
-    Neighbor *temp1 = it1->first;
-    Neighbor *temp2 = it2->first;
-
-    // Puts temp1 and temp2 at last Neighbor or at nullptr (if no neighbors)
-    if (temp1 != nullptr) {
-        while (temp1->next != nullptr) {
-            if (temp1->name == label2) {
-                return;
-            }
-            temp1 = temp1->next;
-        }
-        if (temp1->name == label2) {
-            return;
-        }
-    }
-    if (temp2 != nullptr) {
-        while (temp2->next != nullptr) {
-            if (temp2->name == label1) {
-                return;
-            }
-            temp2 = temp2->next;
-        }
-        if (temp2->name == label1) {
-            return;
-        }
-    }
-
     // Creates Neighbor class objects for edges
-    Neighbor newEdge1(label2, weight);
-    Neighbor newEdge2(label1, weight);
+    Neighbor *newEdge1 = new Neighbor(label2, weight);
+    Neighbor *newEdge2 = new Neighbor(label1, weight);
 
-    // Places edges in AdjList
-    if (temp1 != nullptr) {
-        temp1->next = &newEdge1;
-    }
-    else {
-        it1->first = &newEdge1;
-    }
-    if (temp2 != nullptr) {
-        temp2->next = &newEdge2;
-    }
-    else {
-        it2->first = &newEdge2;
-    }
-
-//     // Find first Vertex or go to end of the AdjList
-//     while (it != graph.end() && it->name != label1) {
-//         it++;
-//     }
-
-//     std::cout << "gets through finding vert" << std::endl; // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-//     std::cout << "this is vert: " << it->name << std::endl; // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-//     // If first Vertex found, add edge
-//     if (it != graph.end()) {
-//         // First neighbor
-//         Neighbor *temp = it->first;
-
-//         std::cout << "does this print?" << std::endl; // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-//         // Go to end of neighbors
-//         while (temp != nullptr && temp->next != nullptr) {
-//             // Ensures edge does not already exist
-
-//             std::cout << "this is a neighbor: " << temp->name << std::endl; // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-//             if (temp->name == label2) {
-//                 return;
-//             }
-//             temp = temp->next;
-//         }
-
-//         // Ensures last neighbor does not hold edge being added
-//         if (temp != nullptr && temp->name == label2) {
-//                 return;
-//             }
-
-//         // newEdge goes to end of neighbors
-//         Neighbor newEdge;
-//         if (temp != nullptr) {
-//             temp->next = &newEdge;
-//         }
-//         else {
-//             it->first = &newEdge;
-//         }
-
-//         newEdge.name = label2;
-//         newEdge.weight = weight;
-//     }
-//     else {
-//         return; // FIX CASE WHERE ONE EDGE ADDED AND OTHER RETURNS 
-//     }
-
-// it = graph.begin();
-
-//     // Find first Vertex or go to end of the AdjList
-//     while (it != graph.end() && it->name != label2) {
-//         it++;
-//     }
-
-//     // If first Vertex found, add edge
-//     if (it != graph.end()) {
-//         // First neighbor
-//         Neighbor *temp = it->first;
-
-//                 // Go to end of neighbors
-//         while (temp != nullptr && temp->next != nullptr) {
-//             // Ensures edge does not already exist
-
-//             std::cout << "this is a neighbor: " << temp->name << std::endl; // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-//             if (temp->name == label1) {
-//                 return;
-//             }
-//             temp = temp->next;
-//         }
-
-//         // Ensures last neighbor does not hold edge being added
-//         if (temp != nullptr && temp->name == label1) {
-//                 return;
-//             }
-
-//         // newEdge goes to end of neighbors
-//         Neighbor newEdge;
-//         if (temp != nullptr) {
-//             temp->next = &newEdge;
-//         }
-//         else {
-//             it->first = &newEdge;
-//         }
-
-//         newEdge.name = label1;
-//         newEdge.weight = weight;
-//     }
-//     else {
-//         return;
-//     }
+    newEdge1->next = it1->first;
+    newEdge2->next = it2->first;
+    it1->first = newEdge1;
+    it2->first = newEdge2;
 }
 
 void AdjList::removeEdge(std::string label, std::string label2) {
@@ -264,6 +134,7 @@ void AdjList::removeVertex(std::string label) {
                 delete temp;
             }
             graph.erase(it);
+            it--;
         }
 
         it++;
@@ -295,5 +166,12 @@ void AdjList::printAll() {
         std::cout << std::endl;
 
         it++;
+    }
+}
+
+AdjList::~AdjList() {
+    while (!graph.empty()) {
+        Vert *temp = &graph.front();
+        removeVertex(temp->name);
     }
 }

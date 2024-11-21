@@ -6,16 +6,6 @@
 
 class AdjList {
 private:
-    /*class Vert {
-    public:
-        Vert(std::string str) { name = str; }
-        std::string name;
-        bool explored = false;
-        int distance = 999999;
-        Vert *lastVisted = nullptr;
-        Neighbor* first;
-    };*/
-
     class Neighbor {
     public:
         std::string name;
@@ -50,6 +40,8 @@ public:
     void printAllVert();
 
     void printAll();
+
+    ~AdjList();
 };
 
 #endif
