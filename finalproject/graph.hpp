@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "graphbase.hpp"
+#include "HeapQueue.hpp"
 
 class AdjList {
 private:
@@ -22,8 +23,24 @@ private:
         Vert *lastVisted = nullptr;
         Neighbor* first = nullptr;
     };
+    class HeapNode {
+        public:
+        HeapNode(std::string name, unsigned long pathValue) { this->name = name, this->pathValue = pathValue; }
+        std::string name; 
+        unsigned long pathValue;
 
+        class Compare {
+            public:
+            Compare(bool lessThan = true) : lessThan(lessThan) {};
+            bool operator()(const HeapNode &n1, const HeapNode &n2) const;
+            bool operator()(const HeapNode *n1, const HeapNode *n2) const;
+            private:
+            bool lessThan;
+        };
+
+    };
     std::vector<Vert> graph;
+    
 
 public:
     void addVertex(std::string label);

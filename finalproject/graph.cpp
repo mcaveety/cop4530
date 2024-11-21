@@ -37,8 +37,6 @@ void AdjList::addEdge(std::string label1, std::string label2, unsigned long weig
 
 void AdjList::removeEdge(std::string label, std::string label2) {
 
-    std::cout << "removeEdge called" << std::endl;
-
     std::vector<Vert>::iterator it;
         it = graph.begin();
 
@@ -182,4 +180,31 @@ AdjList::~AdjList() {
         it++;
     }
     graph.clear();
+}
+
+bool AdjList::HeapNode::Compare::operator()(const HeapNode &n1, const HeapNode &n2) const
+{
+    return lessThan ? n1.pathValue < n2.pathValue : n1.pathValue >= n2.pathValue;
+}
+
+bool AdjList::HeapNode::Compare::operator()(const HeapNode *n1, const HeapNode *n2) const
+{
+  return operator()(*n1, *n2);
+}
+
+unsigned long AdjList::shortestPath(std::string startLabel, std::string endLabel, std::vector<std::string> &path){
+    if (graph.size() == 0){
+        return -1;
+
+    } else if (graph.size() == 1){
+        return 0;
+    }
+
+    std::vector<Vert>::iterator curr = graph.begin();
+    while (curr->name != startLabel){
+        curr++;
+    }
+    curr->distance = 0;
+    
+    HeapQueue<HeapNode*, HeapNode::Compare> minHeap;
 }
