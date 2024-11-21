@@ -36,8 +36,11 @@ void AdjList::addEdge(std::string label1, std::string label2, unsigned long weig
 }
 
 void AdjList::removeEdge(std::string label, std::string label2) {
-std::vector<Vert>::iterator it;
-    it = graph.begin();
+
+    std::cout << "removeEdge called" << std::endl;
+
+    std::vector<Vert>::iterator it;
+        it = graph.begin();
 
     // Look through AdjList for both labels 
     while (it != graph.end()){
@@ -105,10 +108,6 @@ void AdjList::removeVertex(std::string label) {
     it = graph.begin();
     
     while (it != graph.end()) {
-        /*if (it->name == label) {
-            graph.erase(it);
-            return;
-        }*/
         AdjList::Neighbor *next_neighbor = it->first;
         AdjList::Neighbor *prev_neighbor = nullptr;
         while (next_neighbor != nullptr){
@@ -152,6 +151,9 @@ void AdjList::printAllVert() {
 }
 
 void AdjList::printAll() {
+    if (graph.empty()) 
+        return;
+
     std::vector<Vert>::iterator it;
     it = graph.begin();
 
@@ -169,9 +171,27 @@ void AdjList::printAll() {
     }
 }
 
+// AdjList::~AdjList() {
+//     std::vector<Vert>::iterator it;
+//     while (it != graph.end()) {
+//         while (it->first != nullptr) {
+//             Neighbor *temp = it->first;
+//             it->first = temp->next;
+//             delete temp;
+//         }
+//         it++;
+//     }
+//     graph.clear();
+// }
+
 AdjList::~AdjList() {
-    while (!graph.empty()) {
-        Vert *temp = &graph.front();
-        removeVertex(temp->name);
+    std::vector<Vert>::iterator it;
+    it = graph.begin();
+    while (it != graph.end()) {
+        while (it->first != nullptr) {
+            Neighbor *temp = it->first;
+            removeEdge(it->name, temp->name);
+        }
+        it++;
     }
 }
