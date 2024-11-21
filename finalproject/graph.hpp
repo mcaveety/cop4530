@@ -11,11 +11,7 @@ private:
         std::string name;
         int weight;
         Neighbor *next = nullptr;
-        Neighbor() {
-            std::string name;
-            weight;
-            Neighbor *next = nullptr;
-        }
+        Neighbor(std::string name, int weight) { this->name = name, this->weight = weight; }
     };
     class Vert { 
     public:
@@ -40,6 +36,10 @@ public:
 
     unsigned long shortestPath(std::string startLabel, std::string endLabel,
     std::vector<std::string> &path);
+
+    void printAllVert();
+
+    void printAll();
 };
 
 #endif
