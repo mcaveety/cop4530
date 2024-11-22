@@ -193,18 +193,95 @@ bool AdjList::HeapNode::Compare::operator()(const HeapNode *n1, const HeapNode *
 }
 
 unsigned long AdjList::shortestPath(std::string startLabel, std::string endLabel, std::vector<std::string> &path){
+    // If graph does not have any nodes in it, return a -1 for shortest path 
     if (graph.size() == 0){
         return -1;
 
+    // If graph only has one node in it, return a 0 for shortest path 
     } else if (graph.size() == 1){
         return 0;
     }
 
+    // Find the starting vertex in the adjacency list and set the shortest distance to it to 0 
     std::vector<Vert>::iterator curr = graph.begin();
     while (curr->name != startLabel){
         curr++;
     }
     curr->distance = 0;
     
+    // Create the minHeap and insert the current shortest path into it with the name of the vertex 
     HeapQueue<HeapNode*, HeapNode::Compare> minHeap;
+
+    // Loop until we reach the destination (endLabel) 
+    while (curr->name != endLabel){
+        curr->explored = true;
+
+        // Update distance estimates to neighbors and put them on the minHeap
+        Neighbor* currNeighbor = curr->first;
+        unsigned long estimate = curr->distance + currNeighbor->weight;
+
+        while (currNeighbor != nullptr){
+            estimate = curr->distance + currNeighbor->weight;
+
+            // Find the neighbor's vertex equivalent in AdjList 
+            std::vector<Vert>::iterator neighborVert = graph.begin();
+            while(neighborVert->name != currNeighbor->name){
+                neighborVert++;
+            }
+            
+            // If neighbor's best estimate is -1 or higher than our estimate, give it a new best estimate 
+            if ((neighborVert->distance == -1) || (estimate < neighborVert->distance)){
+                neighborVert->distance = estimate; 
+                neighborVert->lastVisted = &(*curr);
+            } 
+
+            // Place estimate, whether best or not, in the minHeap
+            HeapNode* newEntry = new HeapNode(currNeighbor->name, estimate);
+            minHeap.insert(newEntry);
+
+            currNeighbor = currNeighbor->next;
+        }
+
+        // Take the next shortest, unexplored distance estimate and name from the minHeap, remove it, and find the corresponding vertex
+        bool notExplored = false;
+        HeapNode* nextNode = minHeap.min();
+        std::string nextName = nextNode->name;
+        std::vector<Vert>::iterator findIt;
+
+        // Assume that the corresponding vertex has already been explored until proven otherwise
+        while (!notExplored){
+            nextNode = minHeap.min();
+            nextName = nextNode->name;
+            findIt = graph.begin();
+
+            while (findIt->name != nextName){
+                findIt++;
+            }
+            if(findIt->explored){
+                minHeap.removeMin();
+                continue;
+            } else{
+                notExplored = true;
+            }
+        }
+
+        // unsigned long nextValue = nextNode->pathValue;
+        minHeap.removeMin();
+        curr = findIt;
+    }
+
+    unsigned long totalDist = curr->distance;
+    Vert* walkingPointer = &(*curr);
+    std::vector<std::string> stack;
+    while(walkingPointer != nullptr){
+        stack.push_back(walkingPointer->name);
+        walkingPointer = walkingPointer->lastVisted;
+    }
+
+    while(!stack.empty()){
+        path.push_back(stack.back());
+        stack.pop_back();
+    }
+
+    return totalDist;
 }
