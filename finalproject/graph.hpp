@@ -18,8 +18,9 @@ private:
     public:
         Vert(std::string str) { name = str; }
         std::string name;
+        bool hasEstimate = false;
         bool explored = false;
-        int distance = -1;
+        unsigned long distance;
         Vert *lastVisted = nullptr;
         Neighbor* first = nullptr;
     };
