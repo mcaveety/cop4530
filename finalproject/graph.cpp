@@ -1,17 +1,22 @@
+#include <iostream>
 #include "graph.hpp"
 
+// Adds a new vertex to the graph given an input label
+// New vertex will be given the label as a name 
 void AdjList::addVertex(std::string label) {
     Vert *temp = new Vert(label);
     graph.push_back(*temp);
 }
 
+// Adds a new Edge between two existing vertices on the graph given a start, end, and weight 
+// One Neighbor is added to the start and end respectively, and given weight equal to the input 
 void AdjList::addEdge(std::string label1, std::string label2, unsigned long weight) {
     std::vector<Vert>::iterator it1;
     std::vector<Vert>::iterator it2;
     it1 = graph.begin();
     it2 = graph.begin();
 
-    // Puts iterators at Vertex or end
+    // Puts iterators at each Vertex or end
     while (it1 != graph.end() && it1->name != label1) {
         it1++;
     }
@@ -19,29 +24,32 @@ void AdjList::addEdge(std::string label1, std::string label2, unsigned long weig
         it2++;
     }
 
-    // Returns if either Vertex not found
+    // Returns if either Vertex not found (do not exist in graph)
     if (it1 == graph.end() || it2 == graph.end()) {
         return;
     }
 
-    // Creates Neighbor class objects for edges
+    // Creates Neighbor class objects for the new edges
     Neighbor *newEdge1 = new Neighbor(label2, weight);
     Neighbor *newEdge2 = new Neighbor(label1, weight);
 
+    // Places the new Neighbors right next to their respective Vertices
     newEdge1->next = it1->first;
     newEdge2->next = it2->first;
     it1->first = newEdge1;
     it2->first = newEdge2;
 }
 
+// Removes an Edge between two already existing vertices on the graph given and start and end label
 void AdjList::removeEdge(std::string label, std::string label2) {
+
     std::vector<Vert>::iterator it;
-        it = graph.begin();
+    it = graph.begin();
 
     // Look through AdjList for both labels 
     while (it != graph.end()){
         
-        // If name of iterator is first label, delete the connection to the other label 
+        // If name of iterator is the first label, delete the connection to the second label 
         if (it->name == label){
             AdjList::Neighbor *next_neighbor = it->first;
             AdjList::Neighbor *prev_neighbor = nullptr;
@@ -51,6 +59,8 @@ void AdjList::removeEdge(std::string label, std::string label2) {
 
                 // If Neighbor's name matches the other label, get rid of it and re-link other neighbors 
                 if (next_neighbor->name == label2){
+
+                    // Check if the Neighbor is the first Neighbor or not before removing and make the proper changes
                     if (next_neighbor == it->first){
                         it->first = next_neighbor->next;
                         delete next_neighbor;
@@ -67,7 +77,7 @@ void AdjList::removeEdge(std::string label, std::string label2) {
                 next_neighbor = next_neighbor->next;
             }
 
-        // If name of iterator iss the second label, delete the connection to the other label 
+        // If name of iterator is the second label, delete the connection to the first label 
         } else if (it->name == label2){
             AdjList::Neighbor *next_neighbor = it->first;
             AdjList::Neighbor *prev_neighbor = nullptr;
@@ -93,20 +103,23 @@ void AdjList::removeEdge(std::string label, std::string label2) {
                 next_neighbor = next_neighbor->next;
             }
         }
-
         it++;
     }
 }
 
-
+// Removes a Vertex from the graph and removes any edges related to it provided the name of the Vertex
 void AdjList::removeVertex(std::string label) {
     std::vector<Vert>::iterator it;
     it = graph.begin();
     
+    // Iterate over AdjList to find any traces of the target Vertex
     while (it != graph.end()) {
         AdjList::Neighbor *next_neighbor = it->first;
         AdjList::Neighbor *prev_neighbor = nullptr;
+
+        // Check if any of the current vertex's neighbors are the target and remove it if so, accounting for if it is first 
         while (next_neighbor != nullptr){
+
             if (next_neighbor->name == label){
                 if (next_neighbor == it->first){ 
                     it->first = next_neighbor->next;
@@ -122,13 +135,16 @@ void AdjList::removeVertex(std::string label) {
             next_neighbor = next_neighbor->next;
         }
 
+        // If we have found our target vertex, delete all of its neighbors and then remove it from the graph 
         if (it->name == label){
             while (it->first != nullptr){
-                AdjList::Neighbor* temp = it->first; // A -> B -> C -> D
+                AdjList::Neighbor* temp = it->first; 
                 it->first = it->first->next;
                 delete temp;
             }
             graph.erase(it);
+
+            // Decrement the iterator once to compensate for the size of the graph decreasing by one 
             it--;
         }
 
@@ -136,8 +152,9 @@ void AdjList::removeVertex(std::string label) {
     }
 }
 
+// Prints out all of the vertices currently in the graph 
+// Used for debugging purposes
 void AdjList::printAllVert() {
-    std::cout << "This is all Vertices: " << std::endl;
     std::vector<Vert>::iterator it;
     it = graph.begin();
 
@@ -147,9 +164,9 @@ void AdjList::printAllVert() {
     }
 }
 
+// Prints out the full AdjList at a point in the program, including all vertices and their edges 
+// Used for debugging purposes
 void AdjList::printAll() {
-    std::cout << "This is all vertices and edges: " << std::endl;
-
     if (graph.empty()) 
         return;
 
@@ -170,25 +187,131 @@ void AdjList::printAll() {
     }
 }
 
+// Destructor; deletes all edges and nodes in the AdjList
 AdjList::~AdjList() {
-    if (graph.empty())
-        return;
-
     std::vector<Vert>::iterator it;
     it = graph.begin();
-    Neighbor *temp = it->first;
-
     while (it != graph.end()) {
         while (it->first != nullptr) {
-            temp = it->first;
+            Neighbor *temp = it->first;
             removeEdge(it->name, temp->name);
         }
         it++;
     }
-
     graph.clear();
 }
 
-// unsigned long AdjList::shortestPath(std::string startLabel, std::string endLabel, std::vector<std::string> &path) {
+// Comparison operator used to maintain the order of the minHeap
+// Compares the pathValue (distance to get to a point using this path) tied to each node to sort them 
+bool AdjList::HeapNode::Compare::operator()(const HeapNode &n1, const HeapNode &n2) const
+{
+    return lessThan ? n1.pathValue < n2.pathValue : n1.pathValue >= n2.pathValue;
+}
 
-// }
+// Comparison operator used to maintain the order of the minHeap 
+// If pointers to HeapNodes are passed in instead of the nodes themselves, evaluate them and redirect to other comparison
+bool AdjList::HeapNode::Compare::operator()(const HeapNode *n1, const HeapNode *n2) const
+{
+  return operator()(*n1, *n2);
+}
+
+// Determines the path to get from the Vertex with name = startLabel to the Vertex with name = endLabel
+// Returns the amount of distance required to travel there and stores the path inside a provided string vector
+unsigned long AdjList::shortestPath(std::string startLabel, std::string endLabel, std::vector<std::string> &path){
+
+    // If graph does not have any nodes in it, return a -1 for shortest path 
+    if (graph.size() == 0){
+        return -1;
+
+    // If graph only has one node in it, return a 0 for shortest path 
+    } else if (graph.size() == 1){
+        return 0;
+    }
+
+    // Find the starting vertex in the adjacency list and set the shortest distance to it to 0 
+    std::vector<Vert>::iterator curr = graph.begin();
+    while (curr->name != startLabel){
+        curr++;
+    }
+    curr->distance = 0;
+    
+    // Create the minHeap  
+    HeapQueue<HeapNode*, HeapNode::Compare> minHeap;
+
+    // Loop until we reach the destination (endLabel) 
+    while (curr->name != endLabel){
+        curr->explored = true;
+
+        // Update distance estimates to all neighbors and put them on the minHeap
+        Neighbor* currNeighbor = curr->first;
+        unsigned long estimate = curr->distance + currNeighbor->weight;
+
+        while (currNeighbor != nullptr){
+            estimate = curr->distance + currNeighbor->weight;
+
+            // Find the neighbor's vertex equivalent in AdjList 
+            std::vector<Vert>::iterator neighborVert = graph.begin();
+            while(neighborVert->name != currNeighbor->name){
+                neighborVert++;
+            }
+            
+            // If neighbor's best estimate is -1 or higher than our estimate, give it our estimate 
+            if ((neighborVert->distance == -1) || (estimate < neighborVert->distance)){
+                neighborVert->distance = estimate; 
+                neighborVert->lastVisted = &(*curr);
+            } 
+
+            // Place estimate, whether best or not, in the minHeap
+            HeapNode* newEntry = new HeapNode(currNeighbor->name, estimate);
+            minHeap.insert(newEntry);
+
+            currNeighbor = currNeighbor->next;
+        }
+
+        // Take the shortest, unexplored distance estimate and name from the minHeap 
+        // Find the corresponding vertex, remove it, and set curr to the corresponding vertex
+        bool notExplored = false;
+        HeapNode* nextNode = minHeap.min();
+        std::string nextName = nextNode->name;
+        std::vector<Vert>::iterator findIt;
+
+        // Assume that the corresponding vertex has already been explored until proven otherwise
+        // Until an unexplored vertex is found, keep pulling from the heap 
+        while (!notExplored){
+            nextNode = minHeap.min();
+            nextName = nextNode->name;
+            findIt = graph.begin();
+
+            while (findIt->name != nextName){
+                findIt++;
+            }
+            if(findIt->explored){
+                minHeap.removeMin();
+                continue;
+            } else{
+                notExplored = true;
+            }
+        }
+
+        minHeap.removeMin();
+        curr = findIt;
+    }
+
+    // If endlabel has been reached, save the current distance estimate in a variable and walk with a pointer
+    unsigned long totalDist = curr->distance;
+    Vert* walkingPointer = &(*curr);
+
+    // Place the name of every vertex visited into a stack, then reverse it to get the path from start -> end 
+    std::vector<std::string> stack;
+    while(walkingPointer != nullptr){
+        stack.push_back(walkingPointer->name);
+        walkingPointer = walkingPointer->lastVisted;
+    }
+
+    while(!stack.empty()){
+        path.push_back(stack.back());
+        stack.pop_back();
+    }
+
+    return totalDist;
+}
