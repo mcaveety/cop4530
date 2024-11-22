@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "graphbase.hpp"
+#include "priorityQueue.hpp"
 
 class AdjList {
 private:

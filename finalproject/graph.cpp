@@ -1,4 +1,3 @@
-#include <iostream>
 #include "graph.hpp"
 
 void AdjList::addVertex(std::string label) {
@@ -172,6 +171,9 @@ void AdjList::printAll() {
 }
 
 AdjList::~AdjList() {
+    if (graph.empty())
+        return;
+
     std::vector<Vert>::iterator it;
     it = graph.begin();
     Neighbor *temp = it->first;
@@ -186,3 +188,7 @@ AdjList::~AdjList() {
 
     graph.clear();
 }
+
+// unsigned long AdjList::shortestPath(std::string startLabel, std::string endLabel, std::vector<std::string> &path) {
+
+// }
