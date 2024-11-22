@@ -1,3 +1,4 @@
+// Include iostream and the header file
 #include <iostream>
 #include "graph.hpp"
 
@@ -221,7 +222,7 @@ unsigned long AdjList::shortestPath(std::string startLabel, std::string endLabel
 
     // If graph does not have any nodes in it, return a -1 for shortest path 
     if (graph.size() == 0){
-        return -1;
+        return 0;
 
     // If graph only has one node in it, return a 0 for shortest path 
     } else if (graph.size() == 1){
@@ -234,6 +235,7 @@ unsigned long AdjList::shortestPath(std::string startLabel, std::string endLabel
         curr++;
     }
     curr->distance = 0;
+    curr->hasEstimate = true;
     
     // Create the minHeap  
     HeapQueue<HeapNode*, HeapNode::Compare> minHeap;
@@ -256,9 +258,10 @@ unsigned long AdjList::shortestPath(std::string startLabel, std::string endLabel
             }
             
             // If neighbor's best estimate is -1 or higher than our estimate, give it our estimate 
-            if ((neighborVert->distance == -1) || (estimate < neighborVert->distance)){
+            if ((!neighborVert->hasEstimate) || (estimate < neighborVert->distance)){
                 neighborVert->distance = estimate; 
                 neighborVert->lastVisted = &(*curr);
+                neighborVert->hasEstimate = true;
             } 
 
             // Place estimate, whether best or not, in the minHeap
