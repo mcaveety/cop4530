@@ -168,8 +168,10 @@ void AdjList::printAllVert() {
 // Prints out the full AdjList at a point in the program, including all vertices and their edges 
 // Used for debugging purposes
 void AdjList::printAll() {
-    if (graph.empty()) 
+    if (graph.empty()) {
+        std::cout << "Empty graph" << std::endl;
         return;
+    }
 
     std::vector<Vert>::iterator it;
     it = graph.begin();
@@ -188,7 +190,21 @@ void AdjList::printAll() {
     }
 }
 
-// Destructor; deletes all edges and nodes in the AdjList
+// Deletes all edges and vertices in Adjlist without destroying the object
+void AdjList::clear() {
+    std::vector<Vert>::iterator it;
+    it = graph.begin();
+    while (it != graph.end()) {
+        while (it->first != nullptr) {
+            Neighbor *temp = it->first;
+            removeEdge(it->name, temp->name);
+        }
+        it++;
+    }
+    graph.clear();
+}
+
+// Destructor; deletes all edges and vertices in the AdjList
 AdjList::~AdjList() {
     std::vector<Vert>::iterator it;
     it = graph.begin();
