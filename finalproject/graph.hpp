@@ -59,6 +59,8 @@ public:
 
     void printAll();
 
+    void clear();
+
     ~AdjList();
 };
 

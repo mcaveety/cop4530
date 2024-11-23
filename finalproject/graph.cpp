@@ -187,6 +187,19 @@ void AdjList::printAll() {
     }
 }
 
+void AdjList::clear() {
+    std::vector<Vert>::iterator it;
+    it = graph.begin();
+    while (it != graph.end()) {
+        while (it->first != nullptr) {
+            Neighbor *temp = it->first;
+            removeEdge(it->name, temp->name);
+        }
+        it++;
+    }
+    graph.clear();
+}
+
 // Destructor; deletes all edges and nodes in the AdjList
 AdjList::~AdjList() {
     std::vector<Vert>::iterator it;
