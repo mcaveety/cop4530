@@ -151,22 +151,51 @@ int main() {
             case 'g':
                 g.clear();
 
-                g.addVertex("1");
-                g.addVertex("2");
-                g.addVertex("3");
-                g.addVertex("4");
-                g.addVertex("5");
-                g.addVertex("6");
+                std::cout << "Load graph 1 or graph 2? (input 1 or 2): ";
+                std::cin >> userChar;
 
-                g.addEdge("1", "2", 7);
-                g.addEdge("1", "3", 9);
-                g.addEdge("1", "6", 14);
-                g.addEdge("2", "3", 10);
-                g.addEdge("2", "4", 15);
-                g.addEdge("3", "4", 11);
-                g.addEdge("3", "6", 2);
-                g.addEdge("4", "5", 6);
-                g.addEdge("5", "6", 9);
+                if (userChar == '1') {
+                    g.addVertex("1");
+                    g.addVertex("2");
+                    g.addVertex("3");
+                    g.addVertex("4");
+                    g.addVertex("5");
+                    g.addVertex("6");
+
+                    g.addEdge("1", "2", 7);
+                    g.addEdge("1", "3", 9);
+                    g.addEdge("1", "6", 14);
+                    g.addEdge("2", "3", 10);
+                    g.addEdge("2", "4", 15);
+                    g.addEdge("3", "4", 11);
+                    g.addEdge("3", "6", 2);
+                    g.addEdge("4", "5", 6);
+                    g.addEdge("5", "6", 9);
+                }
+                else if (userChar == '2') {
+                    g.addVertex("A");
+                    g.addVertex("B");
+                    g.addVertex("C");
+                    g.addVertex("D");
+                    g.addVertex("E");
+                    g.addVertex("F");
+                    g.addVertex("G");
+                    g.addVertex("H");
+                    g.addVertex("I");
+
+                    g.addEdge("A", "B", 1);
+                    g.addEdge("A", "C", 10);
+                    g.addEdge("B", "E", 3);
+                    g.addEdge("C", "D", 7);
+                    g.addEdge("D", "E", 2);
+                    g.addEdge("D", "F", 3);
+                    g.addEdge("D", "G", 8);
+                    g.addEdge("F", "G", 2);
+                    g.addEdge("G", "H", 1);
+                }
+                else {
+                    std::cout << "Invalid input" << std::endl;
+                }
 
                 break;
 

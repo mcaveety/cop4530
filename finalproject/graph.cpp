@@ -167,8 +167,10 @@ void AdjList::printAllVert() {
 // Prints out the full AdjList at a point in the program, including all vertices and their edges 
 // Used for debugging purposes
 void AdjList::printAll() {
-    if (graph.empty()) 
+    if (graph.empty()) {
+        std::cout << "Empty graph" << std::endl;
         return;
+    }
 
     std::vector<Vert>::iterator it;
     it = graph.begin();
