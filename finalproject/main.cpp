@@ -79,6 +79,7 @@ int main() {
         << "Input e to add edge between two vertices\n" 
         << "Input r to remove a vertex from the graph\n" 
         << "Input t to remove an edge between two vertices\n"
+        << "Input c to clear existing graph\n" 
         << "Input g to load example graph from assignment\n" 
         << "Input p to print all vertices and edges in graph\n" 
         << "Input d to use Dijkstra's Algorithm to find the shortest path and distance between two vertices\n" 
@@ -137,6 +138,12 @@ int main() {
                 std::cin >> userStr2;
 
                 g.removeEdge(userStr1, userStr2);
+
+                break;
+
+            // Deletes all vertices and edges of existing graph
+            case 'c':
+                g.clear();
 
                 break;
 
