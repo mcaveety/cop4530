@@ -149,12 +149,12 @@ int main() {
 
             // Loads the example graph featured in the assignment description
             case 'g':
-                g.clear();
-
                 std::cout << "Load graph 1 or graph 2? (input 1 or 2): ";
                 std::cin >> userChar;
 
                 if (userChar == '1') {
+                    g.clear();
+
                     g.addVertex("1");
                     g.addVertex("2");
                     g.addVertex("3");
@@ -173,6 +173,8 @@ int main() {
                     g.addEdge("5", "6", 9);
                 }
                 else if (userChar == '2') {
+                    g.clear();
+
                     g.addVertex("A");
                     g.addVertex("B");
                     g.addVertex("C");
