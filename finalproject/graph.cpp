@@ -187,6 +187,7 @@ void AdjList::printAll() {
     }
 }
 
+// Deletes all edges and vertices in Adjlist without destroying the object
 void AdjList::clear() {
     std::vector<Vert>::iterator it;
     it = graph.begin();
@@ -200,7 +201,7 @@ void AdjList::clear() {
     graph.clear();
 }
 
-// Destructor; deletes all edges and nodes in the AdjList
+// Destructor; deletes all edges and vertices in the AdjList
 AdjList::~AdjList() {
     std::vector<Vert>::iterator it;
     it = graph.begin();

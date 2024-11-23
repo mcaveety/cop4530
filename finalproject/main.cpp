@@ -2,7 +2,7 @@
 #include "graph.hpp"
 
 int main() {
-    AdjList g1;
+    // AdjList g1;
 
     // g1.addVertex("v1");
     // g1.addVertex("v2");
@@ -68,10 +68,12 @@ int main() {
 
     // TESTING ABOVE
 
-    AdjList g;
-    bool loop = true;
+    AdjList g; // graph object
+    bool loop = true; // bool to keep program running until user terminates
 
+    // Loop to keep accepting user input until program terminated or algorithm executed
     while (loop) {
+        // Output for describing user inputs
         std::cout 
         << "\nInput v to add vertex to graph\n" 
         << "Input e to add edge between two vertices\n" 
@@ -83,6 +85,7 @@ int main() {
         << "Input s to stop program\n" 
         << std::endl;
 
+        // Initializing variebles for user input
         std::cout << "Input: ";
         char userChar;
         std::cin >> userChar;
@@ -90,7 +93,9 @@ int main() {
         unsigned long userNum;
         std::vector<std::string> shortestPath;
 
+        // Switch Case to continuously accept user input until algorithm executed or program terminated
         switch (userChar) {
+            // Adds a vertex to the graph
             case 'v':
                 std::cout << "Enter name of vertex to add: ";
                 std::cin >> userStr1;
@@ -99,6 +104,7 @@ int main() {
 
                 break;
 
+            // Adds an edge to the graph
             case 'e':
                 std::cout << "Enter name of first connecting vertex: ";
                 std::cin >> userStr1;
@@ -113,6 +119,7 @@ int main() {
 
                 break;
 
+            // Removes a vertex from the graph
             case 'r':
                 std::cout << "Enter name of vertex to remove: ";
                 std::cin >> userStr1;
@@ -121,6 +128,7 @@ int main() {
 
                 break;
 
+            // Removes an edge from the graph
             case 't':
                 std::cout << "Enter name of first connecting vertex: ";
                 std::cin >> userStr1;
@@ -132,6 +140,7 @@ int main() {
 
                 break;
 
+            // Loads the example graph featured in the assignment description
             case 'g':
                 g.clear();
 
@@ -154,12 +163,14 @@ int main() {
 
                 break;
 
+            // Prints the entire graph in an adjacency list form
             case 'p':
                 std::cout << std::endl;
                 g.printAll();
 
                 break;
 
+            // Executes Dijkstra's Algorithm and terminates program
             case 'd':
                 std::cout << std::endl;
                 
@@ -186,10 +197,12 @@ int main() {
                 loop = false;
                 break;
 
+            // Terminates program
             case 's':
                 loop = false;
                 break;
 
+            // Informs user of invalid input (any input not specified)
             default:
                 std::cout << "Invalid input" << std::endl;
                 break;
