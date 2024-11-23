@@ -181,7 +181,6 @@ int main() {
                     g.addVertex("F");
                     g.addVertex("G");
                     g.addVertex("H");
-                    g.addVertex("I");
 
                     g.addEdge("A", "B", 1);
                     g.addEdge("A", "C", 10);
