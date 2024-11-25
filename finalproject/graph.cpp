@@ -1,10 +1,21 @@
-// Include iostream and the header file
 #include <iostream>
 #include "graph.hpp"
 
 // Adds a new vertex to the graph given an input label
 // New vertex will be given the label as a name 
 void AdjList::addVertex(std::string label) {
+
+    std::vector<Vert>::iterator it;
+    it = graph.begin();
+    while (it != graph.end()) {
+        if (it->name == label) {
+            std::cout << "\nVertex already exists" << std::endl;
+            return;
+        }
+        it++;
+    }
+
+
     Vert *temp = new Vert(label);
     graph.push_back(*temp);
 }
@@ -12,6 +23,15 @@ void AdjList::addVertex(std::string label) {
 // Adds a new Edge between two existing vertices on the graph given a start, end, and weight 
 // One Neighbor is added to the start and end respectively, and given weight equal to the input 
 void AdjList::addEdge(std::string label1, std::string label2, unsigned long weight) {
+
+    // Returns if edge is between same vertex
+    if (label1 == label2) {
+        std::cout << "\nVertices cannot have edges to themselves" << std::endl;
+        return;
+    }
+
+    // Preparing itorators for adj list
+
     std::vector<Vert>::iterator it1;
     std::vector<Vert>::iterator it2;
     it1 = graph.begin();
@@ -27,6 +47,27 @@ void AdjList::addEdge(std::string label1, std::string label2, unsigned long weig
 
     // Returns if either Vertex not found (do not exist in graph)
     if (it1 == graph.end() || it2 == graph.end()) {
+
+        std::cout << "\nAt least one vertex does not exist" << std::endl;
+        return;
+    }
+
+    // Temp variables for iterating over connecting nodes
+    Neighbor *temp1 = it1->first;
+    Neighbor *temp2 = it2->first;
+
+    // Puts temp variables on neighbors if edge already exists
+    while (temp1 != nullptr && temp1->name != label2) {
+        temp1 = temp1->next;
+    }
+    while (temp2 != nullptr && temp2->name != label1) {
+        temp2 = temp2->next;
+    }
+
+    // If edge already exists, no new edge is added
+    if (temp1 != nullptr || temp2 != nullptr) {
+        std::cout << "\nEdge already exists" << std::endl;
+
         return;
     }
 
@@ -43,6 +84,42 @@ void AdjList::addEdge(std::string label1, std::string label2, unsigned long weig
 
 // Removes an Edge between two already existing vertices on the graph given and start and end label
 void AdjList::removeEdge(std::string label, std::string label2) {
+
+
+    // Used to iterate over vertices in adj list
+    std::vector<Vert>::iterator itCheck1 = graph.begin();
+    std::vector<Vert>::iterator itCheck2 = graph.begin();
+
+    // Returns if at least one vertex between edge does not exist
+    while (itCheck1 != graph.end() && itCheck1->name != label) {
+            itCheck1++;
+    }
+    if (itCheck1 == graph.end()){
+            std::cout << "\nAt least one vertex does not exist" << std::endl;
+            return;
+    }
+    while (itCheck2 != graph.end() && itCheck2->name != label2) {
+            itCheck2++;
+    }
+    if (itCheck2 == graph.end()){
+            std::cout << "\nAt least one vertex does not exist" << std::endl;
+            return;
+    }
+
+    // Used to iterate over neighbors
+    AdjList::Neighbor *next_neighbor_check = itCheck1->first;
+
+    // Returns if edge does not exist
+    while(next_neighbor_check != nullptr){
+            if (next_neighbor_check->name == label2){
+                break;
+            } 
+            next_neighbor_check = next_neighbor_check->next;
+    }
+    if (next_neighbor_check == nullptr){
+            return;
+    }
+
 
     std::vector<Vert>::iterator it;
     it = graph.begin();

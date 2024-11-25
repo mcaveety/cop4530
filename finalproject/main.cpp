@@ -209,8 +209,7 @@ int main() {
 
             // Executes Dijkstra's Algorithm and terminates program
             case 'd':
-                std::cout << std::endl;
-                
+
                 std::cout << "Enter starting vertex: ";
                 std::cin >> userStr1;
 
