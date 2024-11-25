@@ -4,6 +4,7 @@
 // Adds a new vertex to the graph given an input label
 // New vertex will be given the label as a name 
 void AdjList::addVertex(std::string label) {
+
     std::vector<Vert>::iterator it;
     it = graph.begin();
     while (it != graph.end()) {
@@ -14,6 +15,7 @@ void AdjList::addVertex(std::string label) {
         it++;
     }
 
+
     Vert *temp = new Vert(label);
     graph.push_back(*temp);
 }
@@ -21,6 +23,7 @@ void AdjList::addVertex(std::string label) {
 // Adds a new Edge between two existing vertices on the graph given a start, end, and weight 
 // One Neighbor is added to the start and end respectively, and given weight equal to the input 
 void AdjList::addEdge(std::string label1, std::string label2, unsigned long weight) {
+
     // Returns if edge is between same vertex
     if (label1 == label2) {
         std::cout << "\nVertices cannot have edges to themselves" << std::endl;
@@ -28,6 +31,7 @@ void AdjList::addEdge(std::string label1, std::string label2, unsigned long weig
     }
 
     // Preparing itorators for adj list
+
     std::vector<Vert>::iterator it1;
     std::vector<Vert>::iterator it2;
     it1 = graph.begin();
@@ -43,6 +47,7 @@ void AdjList::addEdge(std::string label1, std::string label2, unsigned long weig
 
     // Returns if either Vertex not found (do not exist in graph)
     if (it1 == graph.end() || it2 == graph.end()) {
+
         std::cout << "\nAt least one vertex does not exist" << std::endl;
         return;
     }
@@ -62,6 +67,7 @@ void AdjList::addEdge(std::string label1, std::string label2, unsigned long weig
     // If edge already exists, no new edge is added
     if (temp1 != nullptr || temp2 != nullptr) {
         std::cout << "\nEdge already exists" << std::endl;
+
         return;
     }
 
@@ -78,6 +84,7 @@ void AdjList::addEdge(std::string label1, std::string label2, unsigned long weig
 
 // Removes an Edge between two already existing vertices on the graph given and start and end label
 void AdjList::removeEdge(std::string label, std::string label2) {
+
 
     // Used to iterate over vertices in adj list
     std::vector<Vert>::iterator itCheck1 = graph.begin();
@@ -112,6 +119,7 @@ void AdjList::removeEdge(std::string label, std::string label2) {
     if (next_neighbor_check == nullptr){
             return;
     }
+
 
     std::vector<Vert>::iterator it;
     it = graph.begin();

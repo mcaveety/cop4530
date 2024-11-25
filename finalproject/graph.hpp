@@ -1,21 +1,26 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+
 #include <iostream>
 #include "graphbase.hpp"
 #include "HeapQueue.hpp"
+
 
 class AdjList {
 private:
     // Class to describe edge between between vertex stored in name from class Neighbor and vertex stored in name from class Vert
     class Neighbor { 
+
     public:
         std::string name;
         int weight;
         Neighbor *next = nullptr;
         Neighbor(std::string name, int weight) { this->name = name, this->weight = weight; }
     };
+
     // Class to describe a vertex in graph
+
     class Vert { 
     public:
         Vert(std::string str) { name = str; }
@@ -26,12 +31,15 @@ private:
         Vert *lastVisted = nullptr;
         Neighbor* first = nullptr;
     };
+
     // Node used in heap for priority queue
+
     class HeapNode {
         public:
         HeapNode(std::string name, unsigned long pathValue) { this->name = name, this->pathValue = pathValue; }
         std::string name; 
         unsigned long pathValue;
+
 
         // Used to compare between two HeapNodes
         class Compare {
@@ -41,12 +49,14 @@ private:
             bool operator()(const HeapNode *n1, const HeapNode *n2) const;
             private:
             bool lessThan;
+
         };
 
     };
 
     // Adjacency list used to represent graph
     std::vector<Vert> graph;
+
 
 public:
     // Adds vertex to the graph
